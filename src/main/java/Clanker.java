@@ -8,7 +8,7 @@ public class Clanker {
         System.out.println("---------------------------------------");
     }
 
-    private static void writePrompt(String[] lines) {
+    private static void writePrompt(String... lines) {
         printHorizontalLine();
         for (String s : lines) {
             System.out.println(s);
@@ -20,6 +20,45 @@ public class Clanker {
         printHorizontalLine();
         System.out.println(line);
         printHorizontalLine();
+    }
+
+    private static void handleTodoTask(Parser.Command cmd) {
+        String description = String.join(" ", cmd.getAllParameters());
+
+        TodoTask t = new TodoTask(description);
+
+        todoList.addTask(t);
+
+        writePrompt("Added new task:",
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
+    }
+
+    private static void handleDeadlineTask(Parser.Command cmd) {
+        String description = String.join(" ", cmd.getAllParameters());
+        String deadline = cmd.getOptionValue("by");
+
+        DeadlineTask t = new DeadlineTask(description, deadline);
+
+        todoList.addTask(t);
+
+        writePrompt("Added new task:",
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
+    }
+
+    private static void handleEventTask(Parser.Command cmd) {
+        String description = String.join(" ", cmd.getAllParameters());
+        String from = cmd.getOptionValue("from");
+        String to = cmd.getOptionValue("to");
+
+        EventTask t = new EventTask(description, from, to);
+
+        todoList.addTask(t);
+
+        writePrompt("Added new task:",
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     public static void main(String[] args) {
@@ -42,6 +81,15 @@ public class Clanker {
             Parser.Command cmd = Parser.parse(scanner.nextLine());
 
             switch (cmd.getImperative()) {
+                case "todo":
+                    handleTodoTask(cmd);
+                    break;
+                case "deadline":
+                    handleDeadlineTask(cmd);
+                    break;
+                case "event":
+                    handleEventTask(cmd);
+                    break;
                 case "list":
                     List<String> tasks = todoList.listTasks();
                     String[] formattedTasks = new String[todoList.size()];
@@ -85,8 +133,7 @@ public class Clanker {
                 case "bye":
                     break repl;
                 default:
-                    Task t = todoList.addTask(cmd.getImperative() + " " + String.join(" ", cmd.getAllParameters()));
-                    writePrompt(String.format("added: %s", t.toString()));
+                    writePrompt("Unknown command!");
                     break;
             }
         }

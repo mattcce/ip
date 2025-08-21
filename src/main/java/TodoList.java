@@ -8,8 +8,7 @@ public class TodoList {
         tasks = new ArrayList<>();
     }
 
-    public Task addTask(String task) {
-        Task t = new Task(task);
+    public Task addTask(Task t) {
         tasks.add(t);
         return t;
     }
