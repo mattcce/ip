@@ -16,12 +16,6 @@ public class Clanker {
         printHorizontalLine();
     }
 
-    private static void writePrompt(String line) {
-        printHorizontalLine();
-        System.out.println(line);
-        printHorizontalLine();
-    }
-
     private static void handleTodoTask(Parser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
@@ -61,6 +55,49 @@ public class Clanker {
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
+    private static void handleList() {
+        List<String> tasks = todoList.listTasks();
+        String[] formattedTasks = new String[todoList.size()];
+        int count = 0;
+        for (String s : tasks) {
+            formattedTasks[count] = String.format("%s. %s", count + 1, s);
+            count += 1;
+        }
+        writePrompt(formattedTasks);
+    }
+
+    private static void handleMark(Parser.Command cmd) {
+        int taskIndexMark = Integer.parseInt(cmd.getParameter(0)) - 1;
+
+        try {
+            todoList.markAsDone(taskIndexMark);
+        } catch (IndexOutOfBoundsException e) {
+            writePrompt("Could not find this task!");
+            return;
+        }
+
+        writePrompt(
+                "Marked task as done:",
+                todoList.getTask(taskIndexMark).toString()
+                );
+    }
+
+    private static void handleUnmark(Parser.Command cmd) {
+        int taskIndexUnmark = Integer.parseInt(cmd.getParameter(0)) - 1;
+
+        try {
+            todoList.markAsUndone(taskIndexUnmark);
+        } catch (IndexOutOfBoundsException e) {
+            writePrompt("Could not find this task!");
+            return;
+        }
+
+        writePrompt(
+                "Marked task as not done:",
+                todoList.getTask(taskIndexUnmark).toString()
+                );
+    }
+
     public static void main(String[] args) {
         String[] greetings = new String[]{
                 "Hello! I'm Clanker.",
@@ -91,44 +128,13 @@ public class Clanker {
                     handleEventTask(cmd);
                     break;
                 case "list":
-                    List<String> tasks = todoList.listTasks();
-                    String[] formattedTasks = new String[todoList.size()];
-                    int count = 0;
-                    for (String s : tasks) {
-                        formattedTasks[count] = String.format("%s. %s", count + 1, s);
-                        count += 1;
-                    }
-                    writePrompt(formattedTasks);
+                    handleList();
                     break;
                 case "mark":
-                    int taskIndexMark = Integer.parseInt(cmd.getParameter(0)) - 1;
-
-                    try {
-                        todoList.markAsDone(taskIndexMark);
-                    } catch (IndexOutOfBoundsException e) {
-                        writePrompt("Could not find this task!");
-                        break;
-                    }
-
-                    writePrompt(new String[] {
-                            "Marked task as done:",
-                            todoList.getTask(taskIndexMark).toString(),
-                    });
+                    handleMark(cmd);
                     break;
                 case "unmark":
-                    int taskIndexUnmark = Integer.parseInt(cmd.getParameter(0)) - 1;
-
-                    try {
-                        todoList.markAsUndone(taskIndexUnmark);
-                    } catch (IndexOutOfBoundsException e) {
-                        writePrompt("Could not find this task!");
-                        break;
-                    }
-
-                    writePrompt(new String[] {
-                            "Marked task as not done:",
-                            todoList.getTask(taskIndexUnmark).toString(),
-                    });
+                    handleUnmark(cmd);
                     break;
                 case "bye":
                     break repl;
@@ -140,4 +146,6 @@ public class Clanker {
 
         writePrompt(exiting);
     }
+
+
 }
