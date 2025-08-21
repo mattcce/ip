@@ -1,12 +1,21 @@
+import java.util.Scanner;
+
 public class Clanker {
     private static void printHorizontalLine() {
         System.out.println("---------------------------------------");
     }
 
     private static void writePrompt(String[] lines) {
+        printHorizontalLine();
         for (String s : lines) {
             System.out.println(s);
         }
+        printHorizontalLine();
+    }
+
+    private static void writePrompt(String line) {
+        printHorizontalLine();
+        System.out.println(line);
         printHorizontalLine();
     }
 
@@ -20,9 +29,20 @@ public class Clanker {
                 "Bye. Hope to see you again soon!"
         };
 
-        printHorizontalLine();
-
         writePrompt(greetings);
+
+        // REPL
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            String cmd = scanner.nextLine();
+
+            if (cmd.equals("bye")) {
+                break;
+            } else {
+                writePrompt(cmd);
+            }
+        }
 
         writePrompt(exiting);
     }
