@@ -31,7 +31,7 @@ public class Parser {
     }
 
     public static Command parse(String cmd) {
-        String[] splitCmd = cmd.split("/");
+        String[] splitCmd = Arrays.stream(cmd.split("/")).map(String::trim).toArray(String[]::new);
 
         String[] splitMainCommand = splitCmd[0].split(" ");
         String imperative = splitMainCommand[0];
@@ -40,7 +40,7 @@ public class Parser {
         HashMap<String, String> options = new HashMap<>();
         for (int i = 1; i < splitCmd.length; i++) {
             String[] splitOption = splitCmd[i].split(" ", 2);
-            String optionKey = splitOption[0].substring(1);
+            String optionKey = splitOption[0];
             String optionValue = splitOption[1];
 
             options.put(optionKey, optionValue);
