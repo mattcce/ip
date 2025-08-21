@@ -94,10 +94,10 @@ public class Clanker {
     }
 
     private static void handleMark(Parser.Command cmd) {
-        int taskIndexMark = Integer.parseInt(cmd.getParameter(0)) - 1;
+        int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
-            todoList.markAsDone(taskIndexMark);
+            todoList.markAsDone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
             writePrompt("Could not find this task!");
             return;
@@ -105,15 +105,15 @@ public class Clanker {
 
         writePrompt(
                 "Marked task as done:",
-                todoList.getTask(taskIndexMark).toString()
-                );
+                todoList.getTask(taskIndex).toString()
+        );
     }
 
     private static void handleUnmark(Parser.Command cmd) {
-        int taskIndexUnmark = Integer.parseInt(cmd.getParameter(0)) - 1;
+        int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
-            todoList.markAsUndone(taskIndexUnmark);
+            todoList.markAsUndone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
             writePrompt("Could not find this task!");
             return;
@@ -121,8 +121,25 @@ public class Clanker {
 
         writePrompt(
                 "Marked task as not done:",
-                todoList.getTask(taskIndexUnmark).toString()
-                );
+                todoList.getTask(taskIndex).toString()
+        );
+    }
+
+    private static void handleDelete(Parser.Command cmd) {
+        int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
+
+        Task t;
+        try {
+            t = todoList.deleteTask(taskIndex);
+        } catch (IndexOutOfBoundsException e) {
+            writePrompt("Could not find this task!");
+            return;
+        }
+
+        writePrompt(
+                "Deleted this task:",
+                t.toString()
+        );
     }
 
     public static void main(String[] args) {
@@ -131,7 +148,7 @@ public class Clanker {
                 "What can I do you for today?",
         };
 
-        String[] exiting = new String[] {
+        String[] exiting = new String[]{
                 "Bye. Hope to see you again soon!"
         };
 
@@ -162,6 +179,9 @@ public class Clanker {
                     break;
                 case "unmark":
                     handleUnmark(cmd);
+                    break;
+                case "delete":
+                    handleDelete(cmd);
                     break;
                 case "bye":
                     break repl;

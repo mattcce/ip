@@ -2,6 +2,25 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Parser {
+    public static Command parse(String cmd) {
+        String[] splitCmd = Arrays.stream(cmd.split("/")).map(String::trim).toArray(String[]::new);
+
+        String[] splitMainCommand = splitCmd[0].split(" ");
+        String imperative = splitMainCommand[0];
+        String[] parameters = Arrays.stream(splitMainCommand).skip(1).toArray(String[]::new);
+
+        HashMap<String, String> options = new HashMap<>();
+        for (int i = 1; i < splitCmd.length; i++) {
+            String[] splitOption = splitCmd[i].split(" ", 2);
+            String optionKey = splitOption[0];
+            String optionValue = splitOption.length > 1 ? splitOption[1] : "";
+
+            options.put(optionKey, optionValue);
+        }
+
+        return new Command(imperative, parameters, options);
+    }
+
     public static class Command {
         private final String imperative;
         private final String[] parameters;
@@ -28,24 +47,5 @@ public class Parser {
         public String getOptionValue(String key) {
             return this.options.get(key);
         }
-    }
-
-    public static Command parse(String cmd) {
-        String[] splitCmd = Arrays.stream(cmd.split("/")).map(String::trim).toArray(String[]::new);
-
-        String[] splitMainCommand = splitCmd[0].split(" ");
-        String imperative = splitMainCommand[0];
-        String[] parameters = Arrays.stream(splitMainCommand).skip(1).toArray(String[]::new);
-
-        HashMap<String, String> options = new HashMap<>();
-        for (int i = 1; i < splitCmd.length; i++) {
-            String[] splitOption = splitCmd[i].split(" ", 2);
-            String optionKey = splitOption[0];
-            String optionValue = splitOption[1];
-
-            options.put(optionKey, optionValue);
-        }
-
-        return new Command(imperative, parameters, options);
     }
 }

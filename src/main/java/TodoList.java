@@ -25,6 +25,10 @@ public class TodoList {
         return tasks.get(index);
     }
 
+    public Task deleteTask(int index) {
+        return tasks.remove(index);
+    }
+
     public List<String> listTasks() {
         ArrayList<String> tmp = new ArrayList<>(tasks.size());
 
