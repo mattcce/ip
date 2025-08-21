@@ -19,6 +19,11 @@ public class Clanker {
     private static void handleTodoTask(Parser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
+        if (description.isEmpty()) {
+            writePrompt("Oops! The description of a task cannot be empty!");
+            return;
+        }
+
         TodoTask t = new TodoTask(description);
 
         todoList.addTask(t);
@@ -30,7 +35,18 @@ public class Clanker {
 
     private static void handleDeadlineTask(Parser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
+
+        if (description.isEmpty()) {
+            writePrompt("Oops! The description of a task cannot be empty!");
+            return;
+        }
+
         String deadline = cmd.getOptionValue("by");
+
+        if (deadline == null || deadline.isEmpty()) {
+            writePrompt("Oops! You must specify a deadline!");
+            return;
+        }
 
         DeadlineTask t = new DeadlineTask(description, deadline);
 
@@ -43,8 +59,19 @@ public class Clanker {
 
     private static void handleEventTask(Parser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
+
+        if (description.isEmpty()) {
+            writePrompt("Oops! The description of a task cannot be empty!");
+            return;
+        }
+
         String from = cmd.getOptionValue("from");
         String to = cmd.getOptionValue("to");
+
+        if (from == null || to == null || from.isEmpty() || to.isEmpty()) {
+            writePrompt("Oops! You must specify a from and a to date/time for events!");
+            return;
+        }
 
         EventTask t = new EventTask(description, from, to);
 
