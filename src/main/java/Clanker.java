@@ -39,10 +39,9 @@ public class Clanker {
 
         repl:
         while (true) {
-            String cmd = scanner.nextLine();
-            String[] splitCmd = cmd.split(" ");
+            Parser.Command cmd = Parser.parse(scanner.nextLine());
 
-            switch (splitCmd[0]) {
+            switch (cmd.getImperative()) {
                 case "list":
                     List<String> tasks = todoList.listTasks();
                     String[] formattedTasks = new String[todoList.size()];
@@ -54,7 +53,7 @@ public class Clanker {
                     writePrompt(formattedTasks);
                     break;
                 case "mark":
-                    int taskIndexMark = Integer.parseInt(splitCmd[1]) - 1;
+                    int taskIndexMark = Integer.parseInt(cmd.getParameter(0)) - 1;
 
                     try {
                         todoList.markAsDone(taskIndexMark);
@@ -69,7 +68,7 @@ public class Clanker {
                     });
                     break;
                 case "unmark":
-                    int taskIndexUnmark = Integer.parseInt(splitCmd[1]) - 1;
+                    int taskIndexUnmark = Integer.parseInt(cmd.getParameter(0)) - 1;
 
                     try {
                         todoList.markAsUndone(taskIndexUnmark);
@@ -86,8 +85,8 @@ public class Clanker {
                 case "bye":
                     break repl;
                 default:
-                    todoList.addTask(cmd);
-                    writePrompt(String.format("added: %s", cmd));
+                    Task t = todoList.addTask(cmd.getImperative() + " " + String.join(" ", cmd.getAllParameters()));
+                    writePrompt(String.format("added: %s", t.toString()));
                     break;
             }
         }

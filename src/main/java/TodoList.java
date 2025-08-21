@@ -8,8 +8,10 @@ public class TodoList {
         tasks = new ArrayList<>();
     }
 
-    public void addTask(String task) {
-        tasks.add(new Task(task));
+    public Task addTask(String task) {
+        Task t = new Task(task);
+        tasks.add(t);
+        return t;
     }
 
     public void markAsDone(int index) {
