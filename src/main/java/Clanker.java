@@ -46,8 +46,8 @@ public class Clanker {
                     List<String> tasks = todoList.listTasks();
                     String[] formattedTasks = new String[todoList.size()];
                     int count = 0;
-                    for (String s : todoList.listTasks()) {
-                        formattedTasks[count] = String.format("%s. %s", count + 1, tasks.get(count));
+                    for (String s : tasks) {
+                        formattedTasks[count] = String.format("%s. %s", count + 1, s);
                         count += 1;
                     }
                     writePrompt(formattedTasks);
