@@ -40,8 +40,9 @@ public class Clanker {
         repl:
         while (true) {
             String cmd = scanner.nextLine();
+            String[] splitCmd = cmd.split(" ");
 
-            switch (cmd) {
+            switch (splitCmd[0]) {
                 case "list":
                     List<String> tasks = todoList.listTasks();
                     String[] formattedTasks = new String[todoList.size()];
@@ -51,6 +52,36 @@ public class Clanker {
                         count += 1;
                     }
                     writePrompt(formattedTasks);
+                    break;
+                case "mark":
+                    int taskIndexMark = Integer.parseInt(splitCmd[1]) - 1;
+
+                    try {
+                        todoList.markAsDone(taskIndexMark);
+                    } catch (IndexOutOfBoundsException e) {
+                        writePrompt("Could not find this task!");
+                        break;
+                    }
+
+                    writePrompt(new String[] {
+                            "Marked task as done:",
+                            todoList.getTask(taskIndexMark).toString(),
+                    });
+                    break;
+                case "unmark":
+                    int taskIndexUnmark = Integer.parseInt(splitCmd[1]) - 1;
+
+                    try {
+                        todoList.markAsUndone(taskIndexUnmark);
+                    } catch (IndexOutOfBoundsException e) {
+                        writePrompt("Could not find this task!");
+                        break;
+                    }
+
+                    writePrompt(new String[] {
+                            "Marked task as not done:",
+                            todoList.getTask(taskIndexUnmark).toString(),
+                    });
                     break;
                 case "bye":
                     break repl;

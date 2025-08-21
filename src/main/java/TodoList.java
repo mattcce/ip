@@ -2,20 +2,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TodoList {
-    private final ArrayList<String> tasks;
+    private final ArrayList<Task> tasks;
 
     public TodoList() {
         tasks = new ArrayList<>();
     }
 
     public void addTask(String task) {
-        tasks.add(task);
+        tasks.add(new Task(task));
+    }
+
+    public void markAsDone(int index) {
+        tasks.get(index).markAsDone();
+    }
+
+    public void markAsUndone(int index) {
+        tasks.get(index).markAsUndone();
+    }
+
+    public Task getTask(int index) {
+        return tasks.get(index);
     }
 
     public List<String> listTasks() {
-        // copy list to prevent external mutation
         ArrayList<String> tmp = new ArrayList<>(tasks.size());
-        tmp.addAll(tasks);
+
+        for (Task t : tasks) {
+            tmp.add(t.toString());
+        }
+
         return tmp;
     }
 
