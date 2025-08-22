@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,7 +77,13 @@ public class Clanker {
             return;
         }
 
-        DeadlineTask t = new DeadlineTask(description, deadline);
+        DeadlineTask t = null;
+        try {
+            t = new DeadlineTask(description, deadline);
+        } catch (DateTimeParseException e) {
+            writePrompt("Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
+            return;
+        }
 
         todoList.addTask(t);
 
