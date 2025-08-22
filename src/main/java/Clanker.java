@@ -1,11 +1,35 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Scanner;
 
 public class Clanker {
-    private static final TodoList todoList = new TodoList();
+    private static final Path STORE_PATH = Path.of("./task_store.txt");
+    private static TodoList todoList = new TodoList();
 
-    private static void printHorizontalLine() {
-        System.out.println("---------------------------------------");
+    private static void handleStartup() {
+        String data = "";
+
+        try {
+            if (!Files.exists(STORE_PATH)) {
+                Files.createFile(STORE_PATH);
+            }
+
+            data = Files.readString(STORE_PATH);
+        } catch (IOException e) {
+            writePrompt("Failed to initialise/read local storage: this session will not be saved!");
+            System.out.println(e);
+        }
+
+        todoList = Serde.deserialise(data);
+
+        String[] greetings = new String[]{
+                "Hello! I'm Clanker.",
+                "What can I do you for today?",
+        };
+        writePrompt(greetings);
     }
 
     private static void writePrompt(String... lines) {
@@ -14,6 +38,10 @@ public class Clanker {
             System.out.println(s);
         }
         printHorizontalLine();
+    }
+
+    private static void printHorizontalLine() {
+        System.out.println("---------------------------------------");
     }
 
     private static void handleTodoTask(CommandParser.Command cmd) {
@@ -143,22 +171,27 @@ public class Clanker {
     }
 
     public static void handleSerialise() {
-        String serialised = todoList.serialise();
+        String serialised = Serde.serialise(todoList);
 
         writePrompt(serialised);
     }
 
-    public static void main(String[] args) {
-        String[] greetings = new String[]{
-                "Hello! I'm Clanker.",
-                "What can I do you for today?",
-        };
+    public static void handleExit() {
+        String serialised = Serde.serialise(todoList);
 
+        try {
+            Files.writeString(STORE_PATH, serialised, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            writePrompt("Failed to write to local storage: this session will not be saved!");
+        }
+    }
+
+    public static void main(String[] args) {
         String[] exiting = new String[]{
                 "Bye. Hope to see you again soon!"
         };
 
-        writePrompt(greetings);
+        handleStartup();
 
         // REPL
         Scanner scanner = new Scanner(System.in);
@@ -190,6 +223,7 @@ public class Clanker {
                     handleDelete(cmd);
                     break;
                 case "bye":
+                    handleExit();
                     break repl;
                 case "serialise":
                     handleSerialise();
