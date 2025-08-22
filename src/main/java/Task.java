@@ -1,4 +1,4 @@
-public abstract class Task {
+public abstract class Task implements Serialisable {
     private final String description;
     private boolean isDone;
 

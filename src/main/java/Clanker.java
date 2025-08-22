@@ -1,11 +1,35 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Scanner;
 
 public class Clanker {
-    private static final TodoList todoList = new TodoList();
+    private static final Path STORE_PATH = Path.of("./task_store.txt");
+    private static TodoList todoList = new TodoList();
 
-    private static void printHorizontalLine() {
-        System.out.println("---------------------------------------");
+    private static void handleStartup() {
+        String data = "";
+
+        try {
+            if (!Files.exists(STORE_PATH)) {
+                Files.createFile(STORE_PATH);
+            }
+
+            data = Files.readString(STORE_PATH);
+        } catch (IOException e) {
+            writePrompt("Failed to initialise/read local storage: this session will not be saved!");
+            System.out.println(e);
+        }
+
+        todoList = Serde.deserialise(data);
+
+        String[] greetings = new String[]{
+                "Hello! I'm Clanker.",
+                "What can I do you for today?",
+        };
+        writePrompt(greetings);
     }
 
     private static void writePrompt(String... lines) {
@@ -16,7 +40,11 @@ public class Clanker {
         printHorizontalLine();
     }
 
-    private static void handleTodoTask(Parser.Command cmd) {
+    private static void printHorizontalLine() {
+        System.out.println("---------------------------------------");
+    }
+
+    private static void handleTodoTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -33,7 +61,7 @@ public class Clanker {
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleDeadlineTask(Parser.Command cmd) {
+    private static void handleDeadlineTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -57,7 +85,7 @@ public class Clanker {
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleEventTask(Parser.Command cmd) {
+    private static void handleEventTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -93,7 +121,7 @@ public class Clanker {
         writePrompt(formattedTasks);
     }
 
-    private static void handleMark(Parser.Command cmd) {
+    private static void handleMark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
@@ -109,7 +137,7 @@ public class Clanker {
         );
     }
 
-    private static void handleUnmark(Parser.Command cmd) {
+    private static void handleUnmark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
@@ -125,7 +153,7 @@ public class Clanker {
         );
     }
 
-    private static void handleDelete(Parser.Command cmd) {
+    private static void handleDelete(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         Task t;
@@ -142,24 +170,35 @@ public class Clanker {
         );
     }
 
-    public static void main(String[] args) {
-        String[] greetings = new String[]{
-                "Hello! I'm Clanker.",
-                "What can I do you for today?",
-        };
+    public static void handleSerialise() {
+        String serialised = Serde.serialise(todoList);
 
+        writePrompt(serialised);
+    }
+
+    public static void handleExit() {
+        String serialised = Serde.serialise(todoList);
+
+        try {
+            Files.writeString(STORE_PATH, serialised, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            writePrompt("Failed to write to local storage: this session will not be saved!");
+        }
+    }
+
+    public static void main(String[] args) {
         String[] exiting = new String[]{
                 "Bye. Hope to see you again soon!"
         };
 
-        writePrompt(greetings);
+        handleStartup();
 
         // REPL
         Scanner scanner = new Scanner(System.in);
 
         repl:
         while (true) {
-            Parser.Command cmd = Parser.parse(scanner.nextLine());
+            CommandParser.Command cmd = CommandParser.parse(scanner.nextLine());
 
             switch (cmd.getImperative()) {
                 case "todo":
@@ -184,7 +223,11 @@ public class Clanker {
                     handleDelete(cmd);
                     break;
                 case "bye":
+                    handleExit();
                     break repl;
+                case "serialise":
+                    handleSerialise();
+                    break;
                 default:
                     writePrompt("Unknown command!");
                     break;
