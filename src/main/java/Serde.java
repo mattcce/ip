@@ -14,13 +14,13 @@ public class Serde {
 
             switch (taskString[0]) {
                 case "T":
-                    tasks.add(new TodoTask(taskString[1]));
+                    tasks.add(new TodoTask(taskString[2], taskString[1].equals("X")));
                     break;
                 case "D":
-                    tasks.add(new DeadlineTask(taskString[1], taskString[2]));
+                    tasks.add(new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X")));
                     break;
                 case "E":
-                    tasks.add(new EventTask(taskString[1], taskString[2], taskString[3]));
+                    tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
                     break;
             }
         }

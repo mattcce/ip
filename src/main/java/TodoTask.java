@@ -1,4 +1,9 @@
 public class TodoTask extends Task {
+    public TodoTask(String description, boolean isDone) {
+        this(description);
+        if (isDone) this.markAsDone();
+    }
+
     public TodoTask(String description) {
         super(description);
     }
@@ -10,6 +15,6 @@ public class TodoTask extends Task {
 
     @Override
     public String serialise() {
-        return String.format("T|%s", this.getDescription());
+        return String.format("T|%s|%s", this.isDone() ? "X" : "O", this.getDescription());
     }
 }
