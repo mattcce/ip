@@ -142,6 +142,12 @@ public class Clanker {
         );
     }
 
+    public static void handleSerialise() {
+        String serialised = todoList.serialise();
+
+        writePrompt(serialised);
+    }
+
     public static void main(String[] args) {
         String[] greetings = new String[]{
                 "Hello! I'm Clanker.",
@@ -185,6 +191,9 @@ public class Clanker {
                     break;
                 case "bye":
                     break repl;
+                case "serialise":
+                    handleSerialise();
+                    break;
                 default:
                     writePrompt("Unknown command!");
                     break;

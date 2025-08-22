@@ -7,4 +7,9 @@ public class TodoTask extends Task {
     public String toString() {
         return String.format("[T] %s", super.toString());
     }
+
+    @Override
+    public String serialise() {
+        return String.format("T|%s", this.getDescription());
+    }
 }

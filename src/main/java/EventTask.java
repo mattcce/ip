@@ -20,4 +20,9 @@ public class EventTask extends Task {
     public String toString() {
         return String.format("[E] %s (from: %s to: %s)", super.toString(), this.start, this.end);
     }
+
+    @Override
+    public String serialise() {
+        return String.format("E|%s|%s|%s", this.getDescription(), this.start, this.end);
+    }
 }

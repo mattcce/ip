@@ -1,36 +1,38 @@
+import serde.Serialisable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class TodoList {
+public class TodoList implements Serialisable {
     private final ArrayList<Task> tasks;
 
     public TodoList() {
-        tasks = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     public Task addTask(Task t) {
-        tasks.add(t);
+        this.tasks.add(t);
         return t;
     }
 
     public void markAsDone(int index) {
-        tasks.get(index).markAsDone();
+        this.tasks.get(index).markAsDone();
     }
 
     public void markAsUndone(int index) {
-        tasks.get(index).markAsUndone();
+        this.tasks.get(index).markAsUndone();
     }
 
     public Task getTask(int index) {
-        return tasks.get(index);
+        return this.tasks.get(index);
     }
 
     public Task deleteTask(int index) {
-        return tasks.remove(index);
+        return this.tasks.remove(index);
     }
 
     public List<String> listTasks() {
-        ArrayList<String> tmp = new ArrayList<>(tasks.size());
+        ArrayList<String> tmp = new ArrayList<>(this.tasks.size());
 
         for (Task t : tasks) {
             tmp.add(t.toString());
@@ -40,6 +42,16 @@ public class TodoList {
     }
 
     public int size() {
-        return tasks.size();
+        return this.tasks.size();
+    }
+
+    @Override
+    public String serialise() {
+        ArrayList<String> strings = new ArrayList<>();
+        for (Task t : this.tasks) {
+            strings.add(t.serialise());
+        }
+
+        return String.join("\n", strings);
     }
 }
