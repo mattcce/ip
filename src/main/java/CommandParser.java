@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Parser {
+public class CommandParser {
     public static Command parse(String cmd) {
         String[] splitCmd = Arrays.stream(cmd.split("/")).map(String::trim).toArray(String[]::new);
 

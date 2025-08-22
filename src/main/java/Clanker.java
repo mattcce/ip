@@ -16,7 +16,7 @@ public class Clanker {
         printHorizontalLine();
     }
 
-    private static void handleTodoTask(Parser.Command cmd) {
+    private static void handleTodoTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -33,7 +33,7 @@ public class Clanker {
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleDeadlineTask(Parser.Command cmd) {
+    private static void handleDeadlineTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -57,7 +57,7 @@ public class Clanker {
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleEventTask(Parser.Command cmd) {
+    private static void handleEventTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -93,7 +93,7 @@ public class Clanker {
         writePrompt(formattedTasks);
     }
 
-    private static void handleMark(Parser.Command cmd) {
+    private static void handleMark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
@@ -109,7 +109,7 @@ public class Clanker {
         );
     }
 
-    private static void handleUnmark(Parser.Command cmd) {
+    private static void handleUnmark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
@@ -125,7 +125,7 @@ public class Clanker {
         );
     }
 
-    private static void handleDelete(Parser.Command cmd) {
+    private static void handleDelete(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         Task t;
@@ -159,7 +159,7 @@ public class Clanker {
 
         repl:
         while (true) {
-            Parser.Command cmd = Parser.parse(scanner.nextLine());
+            CommandParser.Command cmd = CommandParser.parse(scanner.nextLine());
 
             switch (cmd.getImperative()) {
                 case "todo":
