@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 public class DeadlineTask extends Task {
     private static final DateTimeFormatter DT_ENTRY_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd kkmm");
     private static final DateTimeFormatter DT_DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy");
-    private LocalDateTime deadline;
+    private final LocalDateTime deadline;
 
     public DeadlineTask(String descriptor, String deadline, boolean isDone) {
         this(descriptor, deadline);
