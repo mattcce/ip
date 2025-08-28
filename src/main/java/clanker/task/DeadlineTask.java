@@ -1,8 +1,8 @@
 package clanker.task;
 
-import fmt.DateTimeParser;
-
 import java.time.LocalDateTime;
+
+import fmt.DateTimeParser;
 
 /**
  * Deadline task class that allows setting deadlines for a particular task.

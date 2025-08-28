@@ -1,10 +1,10 @@
 package clanker;
 
-import clanker.task.Task;
-import serde.Serialisable;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import clanker.task.Task;
+import serde.Serialisable;
 
 /**
  * To-do list class that handles a list of Tasks.

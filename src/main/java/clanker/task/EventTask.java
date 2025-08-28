@@ -1,8 +1,8 @@
 package clanker.task;
 
-import fmt.DateTimeParser;
-
 import java.time.LocalDateTime;
+
+import fmt.DateTimeParser;
 
 /**
  * Event task class that allows setting start and end date for an event.
