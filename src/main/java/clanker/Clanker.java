@@ -1,19 +1,21 @@
 package clanker;
 
-import clanker.task.DeadlineTask;
-import clanker.task.EventTask;
-import clanker.task.Task;
-import clanker.task.TodoTask;
-import fmt.CommandParser;
-import serde.Serde;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import clanker.task.DeadlineTask;
+import clanker.task.EventTask;
+import clanker.task.Task;
+import clanker.task.TodoTask;
+import fmt.CommandParser;
+import javafx.util.Pair;
+import serde.Serde;
 
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
@@ -36,22 +38,10 @@ public class Clanker {
         todoList = Serde.deserialise(data);
 
         String[] greetings = new String[]{
-            "Hello! I'm Clanker.",
-            "What can I do you for today?",
+                "Hello! I'm Clanker.",
+                "What can I do you for today?",
         };
         writePrompt(greetings);
-    }
-
-    private static void writePrompt(String... lines) {
-        printHorizontalLine();
-        for (String s : lines) {
-            System.out.println(s);
-        }
-        printHorizontalLine();
-    }
-
-    private static void printHorizontalLine() {
-        System.out.println("---------------------------------------");
     }
 
     private static void handleTodoTask(CommandParser.Command cmd) {
@@ -67,8 +57,8 @@ public class Clanker {
         todoList.addTask(t);
 
         writePrompt("Added new task:",
-            t.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleDeadlineTask(CommandParser.Command cmd) {
@@ -97,8 +87,8 @@ public class Clanker {
         todoList.addTask(t);
 
         writePrompt("Added new task:",
-            t.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleEventTask(CommandParser.Command cmd) {
@@ -122,8 +112,8 @@ public class Clanker {
         todoList.addTask(t);
 
         writePrompt("Added new task:",
-            t.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                t.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleList() {
@@ -148,8 +138,8 @@ public class Clanker {
         }
 
         writePrompt(
-            "Marked task as done:",
-            todoList.getTask(taskIndex).toString()
+                "Marked task as done:",
+                todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -164,8 +154,8 @@ public class Clanker {
         }
 
         writePrompt(
-            "Marked task as not done:",
-            todoList.getTask(taskIndex).toString()
+                "Marked task as not done:",
+                todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -181,9 +171,35 @@ public class Clanker {
         }
 
         writePrompt(
-            "Deleted this task:",
-            t.toString()
+                "Deleted this task:",
+                t.toString()
         );
+    }
+
+    private static void handleFind(CommandParser.Command cmd) {
+        String searchString = String.join(" ", cmd.getAllParameters());
+        List<Pair<Integer, String>> tasks = todoList.filterByDescription((s) -> s.contains(searchString));
+        ArrayList<String> prompt = new ArrayList<>();
+
+        prompt.add("I found these tasks matching your search term!");
+
+        for (Pair<Integer, String> p : tasks) {
+            prompt.add(String.format("%s. %s", p.getKey() + 1, p.getValue()));
+        }
+
+        writePrompt(prompt.toArray(String[]::new));
+    }
+
+    private static void writePrompt(String... lines) {
+        printHorizontalLine();
+        for (String s : lines) {
+            System.out.println(s);
+        }
+        printHorizontalLine();
+    }
+
+    private static void printHorizontalLine() {
+        System.out.println("---------------------------------------");
     }
 
     public static void handleSerialise() {
@@ -204,7 +220,7 @@ public class Clanker {
 
     public static void main(String[] args) {
         String[] exiting = new String[]{
-            "Bye. Hope to see you again soon!"
+                "Bye. Hope to see you again soon!"
         };
 
         handleStartup();
@@ -217,36 +233,39 @@ public class Clanker {
             CommandParser.Command cmd = CommandParser.parse(scanner.nextLine());
 
             switch (cmd.getImperative()) {
-                case "todo":
-                    handleTodoTask(cmd);
-                    break;
-                case "deadline":
-                    handleDeadlineTask(cmd);
-                    break;
-                case "event":
-                    handleEventTask(cmd);
-                    break;
-                case "list":
-                    handleList();
-                    break;
-                case "mark":
-                    handleMark(cmd);
-                    break;
-                case "unmark":
-                    handleUnmark(cmd);
-                    break;
-                case "delete":
-                    handleDelete(cmd);
-                    break;
-                case "bye":
-                    handleExit();
-                    break repl;
-                case "serialise":
-                    handleSerialise();
-                    break;
-                default:
-                    writePrompt("Unknown command!");
-                    break;
+            case "todo":
+                handleTodoTask(cmd);
+                break;
+            case "deadline":
+                handleDeadlineTask(cmd);
+                break;
+            case "event":
+                handleEventTask(cmd);
+                break;
+            case "list":
+                handleList();
+                break;
+            case "mark":
+                handleMark(cmd);
+                break;
+            case "unmark":
+                handleUnmark(cmd);
+                break;
+            case "delete":
+                handleDelete(cmd);
+                break;
+            case "find":
+                handleFind(cmd);
+                break;
+            case "bye":
+                handleExit();
+                break repl;
+            case "serialise":
+                handleSerialise();
+                break;
+            default:
+                writePrompt("Unknown command!");
+                break;
             }
         }
 
