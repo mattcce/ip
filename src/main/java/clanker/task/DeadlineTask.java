@@ -1,6 +1,6 @@
 package clanker.task;
 
-import fmt.Formatters;
+import fmt.DateTimeParser;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ public class DeadlineTask extends Task {
 
     public DeadlineTask(String descriptor, String deadline) {
         super(descriptor);
-        this.deadline = LocalDateTime.parse(deadline, Formatters.DT_ENTRY_FORMAT);
+        this.deadline = DateTimeParser.parseAsEntry(deadline);
     }
 
     public LocalDateTime getDeadline() {
@@ -23,11 +23,11 @@ public class DeadlineTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("[D] %s (by: %s)", super.toString(), this.deadline.format(Formatters.DT_DISPLAY_FORMAT));
+        return String.format("[D] %s (by: %s)", super.toString(), DateTimeParser.display(this.deadline));
     }
 
     @Override
     public String serialise() {
-        return String.format("D|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), this.deadline.format(Formatters.DT_ENTRY_FORMAT));
+        return String.format("D|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.display(this.deadline));
     }
 }

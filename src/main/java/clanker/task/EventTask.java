@@ -1,6 +1,6 @@
 package clanker.task;
 
-import fmt.Formatters;
+import fmt.DateTimeParser;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +15,8 @@ public class EventTask extends Task {
 
     public EventTask(String description, String start, String end) {
         super(description);
-        this.start = LocalDateTime.parse(start, Formatters.DT_ENTRY_FORMAT);
-        this.end = LocalDateTime.parse(end, Formatters.DT_ENTRY_FORMAT);
+        this.start = DateTimeParser.parseAsEntry(start);
+        this.end = DateTimeParser.parseAsEntry(end);
     }
 
     public LocalDateTime getStart() {
@@ -29,11 +29,11 @@ public class EventTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("[E] %s (from: %s to: %s)", super.toString(), this.start.format(Formatters.DT_DISPLAY_FORMAT), this.end.format(Formatters.DT_DISPLAY_FORMAT));
+        return String.format("[E] %s (from: %s to: %s)", super.toString(), DateTimeParser.display(this.start), DateTimeParser.display(this.end));
     }
 
     @Override
     public String serialise() {
-        return String.format("E|%s|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), this.start.format(Formatters.DT_ENTRY_FORMAT), this.end.format(Formatters.DT_ENTRY_FORMAT));
+        return String.format("E|%s|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.start), DateTimeParser.unparse(this.end));
     }
 }
