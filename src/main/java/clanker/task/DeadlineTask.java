@@ -4,16 +4,32 @@ import fmt.DateTimeParser;
 
 import java.time.LocalDateTime;
 
+/**
+ * Deadline task class that allows setting deadlines for a particular task.
+ */
 public class DeadlineTask extends Task {
     private final LocalDateTime deadline;
 
-    public DeadlineTask(String descriptor, String deadline, boolean isDone) {
-        this(descriptor, deadline);
+    /**
+     * Fully specifying constructor, meant to be used by the deserialiser only.
+     *
+     * @param description Task description.
+     * @param deadline    Task deadline in string representation (serialised).
+     * @param isDone      Flag for task completion.
+     */
+    public DeadlineTask(String description, String deadline, boolean isDone) {
+        this(description, deadline);
         if (isDone) this.markAsDone();
     }
 
-    public DeadlineTask(String descriptor, String deadline) {
-        super(descriptor);
+    /**
+     * Basic constructor.
+     *
+     * @param description Task description.
+     * @param deadline    Task deadline in string representation (serialised).
+     */
+    public DeadlineTask(String description, String deadline) {
+        super(description);
         this.deadline = DateTimeParser.parseAsEntry(deadline);
     }
 

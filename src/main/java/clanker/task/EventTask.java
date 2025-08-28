@@ -4,15 +4,33 @@ import fmt.DateTimeParser;
 
 import java.time.LocalDateTime;
 
+/**
+ * Event task class that allows setting start and end date for an event.
+ */
 public class EventTask extends Task {
     private final LocalDateTime start;
     private final LocalDateTime end;
 
+    /**
+     * Fully specifying constructor, meant to be used by the deserialiser only.
+     *
+     * @param description Task description.
+     * @param start       Task start datetime in string representation (serialised).
+     * @param end         Task end datetime in string representation (serialised).
+     * @param isDone      Flag for task completion.
+     */
     public EventTask(String description, String start, String end, boolean isDone) {
         this(description, start, end);
         if (isDone) this.markAsDone();
     }
 
+    /**
+     * Basic constructor.
+     *
+     * @param description Task description.
+     * @param start       Task start datetime in string representation (serialised).
+     * @param end         Task end datetime in string representation (serialised).
+     */
     public EventTask(String description, String start, String end) {
         super(description);
         this.start = DateTimeParser.parseAsEntry(start);

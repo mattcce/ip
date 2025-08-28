@@ -8,12 +8,27 @@ import clanker.task.TodoTask;
 
 import java.util.ArrayList;
 
-// Ser(ialise)-de(serialise)r
+/**
+ * Serialiser-deserialiser for Clanker. This class provides functionality for serialising and deserialising the internal
+ * state of Clanker, to save states between sessions.
+ */
 public class Serde {
+    /**
+     * Returns a string representation of the object to be serialised.
+     *
+     * @param obj Object to be serialised.
+     * @return String representation or serialisation of given object.
+     */
     public static String serialise(Serialisable obj) {
         return obj.serialise();
     }
 
+    /**
+     * Reconstructs a TodoList from a given serialisation/string representation.
+     *
+     * @param s String representation/serialisation of a TodoList.
+     * @return TodoList obtained by deserialising the input.
+     */
     public static TodoList deserialise(String s) {
         String[] taskStrings = s.split("\n");
         ArrayList<Task> tasks = new ArrayList<>();

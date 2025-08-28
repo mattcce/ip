@@ -2,6 +2,9 @@ package clanker.task;
 
 import serde.Serialisable;
 
+/**
+ * General abstract task that defines basic properties: a description and the ability to mark/unmark a task as done.
+ */
 public abstract class Task implements Serialisable {
     private final String description;
     private boolean isDone;
