@@ -1,3 +1,7 @@
+package clanker.task;
+
+import serde.Serialisable;
+
 public abstract class Task implements Serialisable {
     private final String description;
     private boolean isDone;

@@ -1,3 +1,8 @@
+package clanker;
+
+import clanker.task.Task;
+import serde.Serialisable;
+
 import java.util.ArrayList;
 import java.util.List;
 

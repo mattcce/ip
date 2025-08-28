@@ -1,3 +1,5 @@
+package clanker.task;
+
 public class TodoTask extends Task {
     public TodoTask(String description, boolean isDone) {
         this(description);
