@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,11 +14,9 @@ import clanker.task.EventTask;
 import clanker.task.Task;
 import clanker.task.TodoTask;
 import fmt.CommandParser;
+import javafx.util.Pair;
 import serde.Serde;
 
-/**
- * The clanker chatbot that tracks tasks.
- */
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
     private static TodoList todoList = new TodoList();
@@ -43,18 +42,6 @@ public class Clanker {
                 "What can I do you for today?",
         };
         writePrompt(greetings);
-    }
-
-    private static void writePrompt(String... lines) {
-        printHorizontalLine();
-        for (String s : lines) {
-            System.out.println(s);
-        }
-        printHorizontalLine();
-    }
-
-    private static void printHorizontalLine() {
-        System.out.println("---------------------------------------");
     }
 
     private static void handleTodoTask(CommandParser.Command cmd) {
@@ -131,13 +118,17 @@ public class Clanker {
 
     private static void handleList() {
         List<String> tasks = todoList.listTasks();
-        String[] formattedTasks = new String[todoList.size()];
+        ArrayList<String> prompt = new ArrayList<>(todoList.size() + 1);
+
+        prompt.add("These are all your tasks!");
+
         int count = 0;
         for (String s : tasks) {
-            formattedTasks[count] = String.format("%s. %s", count + 1, s);
+            prompt.add(String.format("%s. %s", count + 1, s));
             count += 1;
         }
-        writePrompt(formattedTasks);
+
+        writePrompt(prompt.toArray(String[]::new));
     }
 
     private static void handleMark(CommandParser.Command cmd) {
@@ -189,7 +180,33 @@ public class Clanker {
         );
     }
 
-    private static void handleSerialise() {
+    private static void handleFind(CommandParser.Command cmd) {
+        String searchString = String.join(" ", cmd.getAllParameters());
+        List<Pair<Integer, String>> tasks = todoList.filterByDescription((s) -> s.contains(searchString));
+        ArrayList<String> prompt = new ArrayList<>();
+
+        prompt.add("I found these tasks matching your search term!");
+
+        for (Pair<Integer, String> p : tasks) {
+            prompt.add(String.format("%s. %s", p.getKey() + 1, p.getValue()));
+        }
+
+        writePrompt(prompt.toArray(String[]::new));
+    }
+
+    private static void writePrompt(String... lines) {
+        printHorizontalLine();
+        for (String s : lines) {
+            System.out.println(s);
+        }
+        printHorizontalLine();
+    }
+
+    private static void printHorizontalLine() {
+        System.out.println("---------------------------------------");
+    }
+
+    public static void handleSerialise() {
         String serialised = Serde.serialise(todoList);
 
         writePrompt(serialised);
@@ -245,6 +262,9 @@ public class Clanker {
                 break;
             case "delete":
                 handleDelete(cmd);
+                break;
+            case "find":
+                handleFind(cmd);
                 break;
             case "bye":
                 handleExit();

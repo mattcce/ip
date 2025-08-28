@@ -2,8 +2,10 @@ package clanker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import clanker.task.Task;
+import javafx.util.Pair;
 import serde.Serialisable;
 
 /**
@@ -46,10 +48,6 @@ public class TodoList implements Serialisable {
         this.tasks.get(index).markAsUndone();
     }
 
-    public Task getTask(int index) {
-        return this.tasks.get(index);
-    }
-
     /**
      * Removes a task from the list and shifts all tasks further down up.
      *
@@ -80,6 +78,24 @@ public class TodoList implements Serialisable {
      *
      * @return Size of list of tasks.
      */
+    public List<Pair<Integer, String>> filterByDescription(Predicate<String> pred) {
+        ArrayList<Pair<Integer, String>> tmp = new ArrayList<>();
+
+        for (int i = 0; i < this.size(); i++) {
+            Task t = this.getTask(i);
+
+            if (pred.test(t.getDescription())) {
+                tmp.add(new Pair<>(i, t.toString()));
+            }
+        }
+
+        return tmp;
+    }
+
+    public Task getTask(int index) {
+        return this.tasks.get(index);
+    }
+
     public int size() {
         return this.tasks.size();
     }
