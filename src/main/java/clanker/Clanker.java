@@ -118,13 +118,17 @@ public class Clanker {
 
     private static void handleList() {
         List<String> tasks = todoList.listTasks();
-        String[] formattedTasks = new String[todoList.size()];
+        ArrayList<String> prompt = new ArrayList<>(todoList.size() + 1);
+
+        prompt.add("These are all your tasks!");
+
         int count = 0;
         for (String s : tasks) {
-            formattedTasks[count] = String.format("%s. %s", count + 1, s);
+            prompt.add(String.format("%s. %s", count + 1, s));
             count += 1;
         }
-        writePrompt(formattedTasks);
+
+        writePrompt(prompt.toArray(String[]::new));
     }
 
     private static void handleMark(CommandParser.Command cmd) {
