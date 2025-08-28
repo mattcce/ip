@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,7 +77,13 @@ public class Clanker {
             return;
         }
 
-        DeadlineTask t = new DeadlineTask(description, deadline);
+        DeadlineTask t = null;
+        try {
+            t = new DeadlineTask(description, deadline);
+        } catch (DateTimeParseException e) {
+            writePrompt("Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
+            return;
+        }
 
         todoList.addTask(t);
 
@@ -201,36 +208,36 @@ public class Clanker {
             CommandParser.Command cmd = CommandParser.parse(scanner.nextLine());
 
             switch (cmd.getImperative()) {
-                case "todo":
-                    handleTodoTask(cmd);
-                    break;
-                case "deadline":
-                    handleDeadlineTask(cmd);
-                    break;
-                case "event":
-                    handleEventTask(cmd);
-                    break;
-                case "list":
-                    handleList();
-                    break;
-                case "mark":
-                    handleMark(cmd);
-                    break;
-                case "unmark":
-                    handleUnmark(cmd);
-                    break;
-                case "delete":
-                    handleDelete(cmd);
-                    break;
-                case "bye":
-                    handleExit();
-                    break repl;
-                case "serialise":
-                    handleSerialise();
-                    break;
-                default:
-                    writePrompt("Unknown command!");
-                    break;
+            case "todo":
+                handleTodoTask(cmd);
+                break;
+            case "deadline":
+                handleDeadlineTask(cmd);
+                break;
+            case "event":
+                handleEventTask(cmd);
+                break;
+            case "list":
+                handleList();
+                break;
+            case "mark":
+                handleMark(cmd);
+                break;
+            case "unmark":
+                handleUnmark(cmd);
+                break;
+            case "delete":
+                handleDelete(cmd);
+                break;
+            case "bye":
+                handleExit();
+                break repl;
+            case "serialise":
+                handleSerialise();
+                break;
+            default:
+                writePrompt("Unknown command!");
+                break;
             }
         }
 
