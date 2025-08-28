@@ -1,8 +1,8 @@
 package clanker.task;
 
-import fmt.DateTimeParser;
-
 import java.time.LocalDateTime;
+
+import fmt.DateTimeParser;
 
 public class DeadlineTask extends Task {
     private final LocalDateTime deadline;
@@ -28,6 +28,6 @@ public class DeadlineTask extends Task {
 
     @Override
     public String serialise() {
-        return String.format("D|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.display(this.deadline));
+        return String.format("D|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.deadline));
     }
 }
