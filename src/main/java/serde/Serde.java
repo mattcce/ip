@@ -1,12 +1,12 @@
 package serde;
 
+import java.util.ArrayList;
+
 import clanker.TodoList;
 import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
 import clanker.task.Task;
 import clanker.task.TodoTask;
-
-import java.util.ArrayList;
 
 // Ser(ialise)-de(serialise)r
 public class Serde {
@@ -21,15 +21,15 @@ public class Serde {
             String[] taskString = ts.split("\\|");
 
             switch (taskString[0]) {
-                case "T":
-                    tasks.add(new TodoTask(taskString[2], taskString[1].equals("X")));
-                    break;
-                case "D":
-                    tasks.add(new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X")));
-                    break;
-                case "E":
-                    tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
-                    break;
+            case "T":
+                tasks.add(new TodoTask(taskString[2], taskString[1].equals("X")));
+                break;
+            case "D":
+                tasks.add(new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X")));
+                break;
+            case "E":
+                tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
+                break;
             }
         }
 

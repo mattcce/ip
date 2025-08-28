@@ -1,9 +1,10 @@
 package clanker;
 
-import clanker.task.TaskStub;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import clanker.task.TaskStub;
 
 public class TodoListTest {
     @Test

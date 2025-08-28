@@ -1,8 +1,8 @@
 package clanker.task;
 
-import fmt.DateTimeParser;
-
 import java.time.LocalDateTime;
+
+import fmt.DateTimeParser;
 
 public class DeadlineTask extends Task {
     private final LocalDateTime deadline;
