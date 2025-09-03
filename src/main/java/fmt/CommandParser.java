@@ -69,7 +69,7 @@ public class CommandParser {
          * Returns the value associated with the key, if provided as an option.
          *
          * @param key The option key to look for.
-         * @return The value associated with the given key.
+         * @return The value associated with the given key, or returns null if the key was not specified.
          */
         public String getOptionValue(String key) {
             return this.options.get(key);
