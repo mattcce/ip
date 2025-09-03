@@ -31,7 +31,7 @@ public class Clanker {
 
             data = Files.readString(STORE_PATH);
         } catch (IOException e) {
-            writePrompt("Failed to initialise/read local storage: this session will not be saved!");
+            displayPrompt("Failed to initialise/read local storage: this session will not be saved!");
             System.out.println(e);
         }
 
@@ -41,23 +41,23 @@ public class Clanker {
                 "Hello! I'm Clanker.",
                 "What can I do you for today?",
         };
-        writePrompt(greetings);
+        displayPrompt(greetings);
     }
 
     private static void handleTodoTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            writePrompt("Oops! The description of a task cannot be empty!");
+            displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
-        TodoTask t = new TodoTask(description);
+        TodoTask task = new TodoTask(description);
 
-        todoList.addTask(t);
+        todoList.addTask(task);
 
-        writePrompt("Added new task:",
-                t.toString(),
+        displayPrompt("Added new task:",
+                task.toString(),
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
@@ -65,29 +65,29 @@ public class Clanker {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            writePrompt("Oops! The description of a task cannot be empty!");
+            displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
         String deadline = cmd.getOptionValue("by");
 
         if (deadline == null || deadline.isEmpty()) {
-            writePrompt("Oops! You must specify a deadline!");
+            displayPrompt("Oops! You must specify a deadline!");
             return;
         }
 
-        DeadlineTask t = null;
+        DeadlineTask task = null;
         try {
-            t = new DeadlineTask(description, deadline);
+            task = new DeadlineTask(description, deadline);
         } catch (DateTimeParseException e) {
-            writePrompt("Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
+            displayPrompt("Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
             return;
         }
 
-        todoList.addTask(t);
+        todoList.addTask(task);
 
-        writePrompt("Added new task:",
-                t.toString(),
+        displayPrompt("Added new task:",
+                task.toString(),
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
@@ -95,7 +95,7 @@ public class Clanker {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            writePrompt("Oops! The description of a task cannot be empty!");
+            displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
@@ -103,16 +103,16 @@ public class Clanker {
         String to = cmd.getOptionValue("to");
 
         if (from == null || to == null || from.isEmpty() || to.isEmpty()) {
-            writePrompt("Oops! You must specify a from and a to date/time for events!");
+            displayPrompt("Oops! You must specify a from and a to date/time for events!");
             return;
         }
 
-        EventTask t = new EventTask(description, from, to);
+        EventTask task = new EventTask(description, from, to);
 
-        todoList.addTask(t);
+        todoList.addTask(task);
 
-        writePrompt("Added new task:",
-                t.toString(),
+        displayPrompt("Added new task:",
+                task.toString(),
                 String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
@@ -128,7 +128,7 @@ public class Clanker {
             count += 1;
         }
 
-        writePrompt(prompt.toArray(String[]::new));
+        displayPrompt(prompt.toArray(String[]::new));
     }
 
     private static void handleMark(CommandParser.Command cmd) {
@@ -137,11 +137,11 @@ public class Clanker {
         try {
             todoList.markAsDone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            writePrompt("Could not find this task!");
+            displayPrompt("Could not find this task!");
             return;
         }
 
-        writePrompt(
+        displayPrompt(
                 "Marked task as done:",
                 todoList.getTask(taskIndex).toString()
         );
@@ -153,11 +153,11 @@ public class Clanker {
         try {
             todoList.markAsUndone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            writePrompt("Could not find this task!");
+            displayPrompt("Could not find this task!");
             return;
         }
 
-        writePrompt(
+        displayPrompt(
                 "Marked task as not done:",
                 todoList.getTask(taskIndex).toString()
         );
@@ -170,11 +170,11 @@ public class Clanker {
         try {
             t = todoList.deleteTask(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            writePrompt("Could not find this task!");
+            displayPrompt("Could not find this task!");
             return;
         }
 
-        writePrompt(
+        displayPrompt(
                 "Deleted this task:",
                 t.toString()
         );
@@ -191,10 +191,10 @@ public class Clanker {
             prompt.add(String.format("%s. %s", p.getKey() + 1, p.getValue()));
         }
 
-        writePrompt(prompt.toArray(String[]::new));
+        displayPrompt(prompt.toArray(String[]::new));
     }
 
-    private static void writePrompt(String... lines) {
+    private static void displayPrompt(String... lines) {
         printHorizontalLine();
         for (String s : lines) {
             System.out.println(s);
@@ -209,7 +209,7 @@ public class Clanker {
     public static void handleSerialise() {
         String serialised = Serde.serialise(todoList);
 
-        writePrompt(serialised);
+        displayPrompt(serialised);
     }
 
     private static void handleExit() {
@@ -218,7 +218,7 @@ public class Clanker {
         try {
             Files.writeString(STORE_PATH, serialised, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            writePrompt("Failed to write to local storage: this session will not be saved!");
+            displayPrompt("Failed to write to local storage: this session will not be saved!");
         }
     }
 
@@ -273,11 +273,11 @@ public class Clanker {
                 handleSerialise();
                 break;
             default:
-                writePrompt("Unknown command!");
+                displayPrompt("Unknown command!");
                 break;
             }
         }
 
-        writePrompt(exiting);
+        displayPrompt(exiting);
     }
 }
