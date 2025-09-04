@@ -21,7 +21,9 @@ public class EventTask extends Task {
      */
     public EventTask(String description, String start, String end, boolean isDone) {
         this(description, start, end);
-        if (isDone) this.markAsDone();
+        if (isDone) {
+            this.markAsDone();
+        }
     }
 
     /**
@@ -47,11 +49,14 @@ public class EventTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("[E] %s (from: %s to: %s)", super.toString(), DateTimeParser.display(this.start), DateTimeParser.display(this.end));
+        return String.format("[E] %s (from: %s to: %s)",
+            super.toString(), DateTimeParser.display(this.start), DateTimeParser.display(this.end));
     }
 
     @Override
     public String serialise() {
-        return String.format("E|%s|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.start), DateTimeParser.unparse(this.end));
+        return String.format("E|%s|%s|%s|%s",
+            this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.start),
+            DateTimeParser.unparse(this.end));
     }
 }

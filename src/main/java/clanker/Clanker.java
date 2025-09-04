@@ -17,6 +17,9 @@ import javafx.util.Pair;
 import parsers.CommandParser;
 import serde.Serde;
 
+/**
+ * The clanker that manages your tasks.
+ */
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
     private static TodoList todoList = new TodoList();
@@ -38,8 +41,8 @@ public class Clanker {
         todoList = Serde.deserialise(data);
 
         String[] greetings = new String[]{
-                "Hello! I'm Clanker.",
-                "What can I do you for today?",
+            "Hello! I'm Clanker.",
+            "What can I do you for today?",
         };
         displayPrompt(greetings);
     }
@@ -57,8 +60,8 @@ public class Clanker {
         todoList.addTask(task);
 
         displayPrompt("Added new task:",
-                task.toString(),
-                String.format("There are now %d tasks in your list.", todoList.size()));
+            task.toString(),
+            String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleDeadlineTask(CommandParser.Command cmd) {
@@ -80,15 +83,16 @@ public class Clanker {
         try {
             task = new DeadlineTask(description, deadline);
         } catch (DateTimeParseException e) {
-            displayPrompt("Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
+            displayPrompt(
+                "Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
             return;
         }
 
         todoList.addTask(task);
 
         displayPrompt("Added new task:",
-                task.toString(),
-                String.format("There are now %d tasks in your list.", todoList.size()));
+            task.toString(),
+            String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleEventTask(CommandParser.Command cmd) {
@@ -112,8 +116,8 @@ public class Clanker {
         todoList.addTask(task);
 
         displayPrompt("Added new task:",
-                task.toString(),
-                String.format("There are now %d tasks in your list.", todoList.size()));
+            task.toString(),
+            String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     private static void handleList() {
@@ -142,8 +146,8 @@ public class Clanker {
         }
 
         displayPrompt(
-                "Marked task as done:",
-                todoList.getTask(taskIndex).toString()
+            "Marked task as done:",
+            todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -158,8 +162,8 @@ public class Clanker {
         }
 
         displayPrompt(
-                "Marked task as not done:",
-                todoList.getTask(taskIndex).toString()
+            "Marked task as not done:",
+            todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -175,8 +179,8 @@ public class Clanker {
         }
 
         displayPrompt(
-                "Deleted this task:",
-                t.toString()
+            "Deleted this task:",
+            t.toString()
         );
     }
 
@@ -206,7 +210,7 @@ public class Clanker {
         System.out.println("---------------------------------------");
     }
 
-    public static void handleSerialise() {
+    private static void handleSerialise() {
         String serialised = Serde.serialise(todoList);
 
         displayPrompt(serialised);
@@ -229,7 +233,7 @@ public class Clanker {
      */
     public static void main(String[] args) {
         String[] exiting = new String[]{
-                "Bye. Hope to see you again soon!"
+            "Bye. Hope to see you again soon!"
         };
 
         handleStartup();

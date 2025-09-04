@@ -45,6 +45,8 @@ public class Serde {
             case "E":
                 tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
                 break;
+            default:
+                break;
             }
         }
 
