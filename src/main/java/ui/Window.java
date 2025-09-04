@@ -28,6 +28,9 @@ public class Window extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/assets/monke.jpg"));
     private Image clankerImage = new Image(this.getClass().getResourceAsStream("/assets/clanker.jpg"));
 
+    /**
+     * Constructs main window with all base components.
+     */
     public Window() {
         this.scrollPane.setContent(dialogContainer);
         this.getChildren().addAll(scrollPane, userInput, sendButton);
