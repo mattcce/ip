@@ -1,5 +1,7 @@
 package clanker;
 
+import static parsers.CommandParser.Command;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,7 +9,6 @@ import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
@@ -16,15 +17,40 @@ import clanker.task.TodoTask;
 import javafx.util.Pair;
 import parsers.CommandParser;
 import serde.Serde;
+import ui.utils.Writer;
 
 /**
  * The clanker that manages your tasks.
  */
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
-    private static TodoList todoList = new TodoList();
+    private final Writer writer;
+    private TodoList todoList = new TodoList();
 
-    private static void handleStartup() {
+    /**
+     * Creates a new clanker.
+     *
+     * @param writer Callback to pipe Clanker's output to.
+     */
+    private Clanker(Writer writer) {
+        this.writer = writer;
+    }
+
+    /**
+     * Initialises a new clanker.
+     *
+     * @param writer Callback to pipe Clanker's output to.
+     * @return The created Clanker.
+     */
+    public static Clanker initialise(Writer writer) {
+        Clanker clanker = new Clanker(writer);
+
+        clanker.handleStartup();
+
+        return clanker;
+    }
+
+    private void handleStartup() {
         String data = "";
 
         try {
@@ -34,24 +60,86 @@ public class Clanker {
 
             data = Files.readString(STORE_PATH);
         } catch (IOException e) {
-            displayPrompt("Failed to initialise/read local storage: this session will not be saved!");
+            this.displayPrompt("Failed to initialise/read local storage: this session will not be saved!");
             System.out.println(e);
         }
 
         todoList = Serde.deserialise(data);
 
+        System.out.println("Here.");
+
         String[] greetings = new String[]{
             "Hello! I'm Clanker.",
             "What can I do you for today?",
         };
-        displayPrompt(greetings);
+        this.displayPrompt(greetings);
     }
 
-    private static void handleTodoTask(CommandParser.Command cmd) {
+    private void displayPrompt(String... lines) {
+        this.writer.write(formatLines(lines));
+    }
+
+    private static String formatLines(String... lines) {
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : lines) {
+            sb.append(s);
+            sb.append("\n");
+        }
+
+        return sb.toString().trim();
+    }
+
+    /**
+     * Handles user command.
+     *
+     * @param input User command, given as one string.
+     */
+    public void handleCommand(String input) {
+        Command cmd = CommandParser.parse(input);
+
+        switch (cmd.getImperative()) {
+        case "todo":
+            this.handleTodoTask(cmd);
+            break;
+        case "deadline":
+            this.handleDeadlineTask(cmd);
+            break;
+        case "event":
+            this.handleEventTask(cmd);
+            break;
+        case "list":
+            this.handleList();
+            break;
+        case "mark":
+            this.handleMark(cmd);
+            break;
+        case "unmark":
+            this.handleUnmark(cmd);
+            break;
+        case "delete":
+            this.handleDelete(cmd);
+            break;
+        case "find":
+            this.handleFind(cmd);
+            break;
+        case "bye":
+            this.handleExit();
+            break;
+        case "serialise":
+            this.handleSerialise();
+            break;
+        default:
+            this.displayPrompt("Unknown command!");
+            break;
+        }
+    }
+
+    private void handleTodoTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            displayPrompt("Oops! The description of a task cannot be empty!");
+            this.displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
@@ -59,23 +147,23 @@ public class Clanker {
 
         todoList.addTask(task);
 
-        displayPrompt("Added new task:",
+        this.displayPrompt("Added new task:",
             task.toString(),
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleDeadlineTask(CommandParser.Command cmd) {
+    private void handleDeadlineTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            displayPrompt("Oops! The description of a task cannot be empty!");
+            this.displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
         String deadline = cmd.getOptionValue("by");
 
         if (deadline == null || deadline.isEmpty()) {
-            displayPrompt("Oops! You must specify a deadline!");
+            this.displayPrompt("Oops! You must specify a deadline!");
             return;
         }
 
@@ -83,23 +171,23 @@ public class Clanker {
         try {
             task = new DeadlineTask(description, deadline);
         } catch (DateTimeParseException e) {
-            displayPrompt(
+            this.displayPrompt(
                 "Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
             return;
         }
 
         todoList.addTask(task);
 
-        displayPrompt("Added new task:",
+        this.displayPrompt("Added new task:",
             task.toString(),
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleEventTask(CommandParser.Command cmd) {
+    private void handleEventTask(CommandParser.Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
-            displayPrompt("Oops! The description of a task cannot be empty!");
+            this.displayPrompt("Oops! The description of a task cannot be empty!");
             return;
         }
 
@@ -107,7 +195,7 @@ public class Clanker {
         String to = cmd.getOptionValue("to");
 
         if (from == null || to == null || from.isEmpty() || to.isEmpty()) {
-            displayPrompt("Oops! You must specify a from and a to date/time for events!");
+            this.displayPrompt("Oops! You must specify a from and a to date/time for events!");
             return;
         }
 
@@ -115,12 +203,12 @@ public class Clanker {
 
         todoList.addTask(task);
 
-        displayPrompt("Added new task:",
+        this.displayPrompt("Added new task:",
             task.toString(),
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private static void handleList() {
+    private void handleList() {
         List<String> tasks = todoList.listTasks();
         ArrayList<String> prompt = new ArrayList<>(todoList.size() + 1);
 
@@ -132,59 +220,59 @@ public class Clanker {
             count += 1;
         }
 
-        displayPrompt(prompt.toArray(String[]::new));
+        this.displayPrompt(prompt.toArray(String[]::new));
     }
 
-    private static void handleMark(CommandParser.Command cmd) {
+    private void handleMark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
             todoList.markAsDone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            displayPrompt("Could not find this task!");
+            this.displayPrompt("Could not find this task!");
             return;
         }
 
-        displayPrompt(
+        this.displayPrompt(
             "Marked task as done:",
             todoList.getTask(taskIndex).toString()
         );
     }
 
-    private static void handleUnmark(CommandParser.Command cmd) {
+    private void handleUnmark(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         try {
             todoList.markAsUndone(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            displayPrompt("Could not find this task!");
+            this.displayPrompt("Could not find this task!");
             return;
         }
 
-        displayPrompt(
+        this.displayPrompt(
             "Marked task as not done:",
             todoList.getTask(taskIndex).toString()
         );
     }
 
-    private static void handleDelete(CommandParser.Command cmd) {
+    private void handleDelete(CommandParser.Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         Task t;
         try {
             t = todoList.deleteTask(taskIndex);
         } catch (IndexOutOfBoundsException e) {
-            displayPrompt("Could not find this task!");
+            this.displayPrompt("Could not find this task!");
             return;
         }
 
-        displayPrompt(
+        this.displayPrompt(
             "Deleted this task:",
             t.toString()
         );
     }
 
-    private static void handleFind(CommandParser.Command cmd) {
+    private void handleFind(CommandParser.Command cmd) {
         String searchString = String.join(" ", cmd.getAllParameters());
         List<Pair<Integer, String>> tasks = todoList.filterByDescription((s) -> s.contains(searchString));
         ArrayList<String> prompt = new ArrayList<>();
@@ -195,93 +283,28 @@ public class Clanker {
             prompt.add(String.format("%s. %s", p.getKey() + 1, p.getValue()));
         }
 
-        displayPrompt(prompt.toArray(String[]::new));
+        this.displayPrompt(prompt.toArray(String[]::new));
     }
 
-    private static void displayPrompt(String... lines) {
-        printHorizontalLine();
-        for (String s : lines) {
-            System.out.println(s);
-        }
-        printHorizontalLine();
-    }
-
-    private static void printHorizontalLine() {
-        System.out.println("---------------------------------------");
-    }
-
-    private static void handleSerialise() {
+    private void handleSerialise() {
         String serialised = Serde.serialise(todoList);
 
-        displayPrompt(serialised);
+        this.displayPrompt(serialised);
     }
 
-    private static void handleExit() {
+    private void handleExit() {
         String serialised = Serde.serialise(todoList);
 
         try {
             Files.writeString(STORE_PATH, serialised, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            displayPrompt("Failed to write to local storage: this session will not be saved!");
+            this.displayPrompt("Failed to write to local storage: this session will not be saved!");
         }
-    }
 
-    /**
-     * Application main loop.
-     *
-     * @param args Ignored.
-     */
-    public static void main(String[] args) {
         String[] exiting = new String[]{
             "Bye. Hope to see you again soon!"
         };
 
-        handleStartup();
-
-        // REPL
-        Scanner scanner = new Scanner(System.in);
-
-        repl:
-        while (true) {
-            CommandParser.Command cmd = CommandParser.parse(scanner.nextLine());
-
-            switch (cmd.getImperative()) {
-            case "todo":
-                handleTodoTask(cmd);
-                break;
-            case "deadline":
-                handleDeadlineTask(cmd);
-                break;
-            case "event":
-                handleEventTask(cmd);
-                break;
-            case "list":
-                handleList();
-                break;
-            case "mark":
-                handleMark(cmd);
-                break;
-            case "unmark":
-                handleUnmark(cmd);
-                break;
-            case "delete":
-                handleDelete(cmd);
-                break;
-            case "find":
-                handleFind(cmd);
-                break;
-            case "bye":
-                handleExit();
-                break repl;
-            case "serialise":
-                handleSerialise();
-                break;
-            default:
-                displayPrompt("Unknown command!");
-                break;
-            }
-        }
-
-        displayPrompt(exiting);
+        this.displayPrompt(exiting);
     }
 }
