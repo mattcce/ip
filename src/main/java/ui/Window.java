@@ -31,7 +31,11 @@ public class Window extends AnchorPane {
     public Window() {
         this.scrollPane.setContent(dialogContainer);
         this.getChildren().addAll(scrollPane, userInput, sendButton);
+    }
 
+    @FXML
+    private void initialize() {
+        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         this.clanker = Clanker.initialise(this::displayClankerResponse);
     }
 
@@ -39,9 +43,7 @@ public class Window extends AnchorPane {
         this.dialogContainer.getChildren().addAll(DialogBox.getClankerDialog(response, clankerImage));
     }
 
-    @FXML
-    public void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+    void setup() {
     }
 
     @FXML
