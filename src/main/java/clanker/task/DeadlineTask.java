@@ -19,7 +19,9 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline, boolean isDone) {
         this(description, deadline);
-        if (isDone) this.markAsDone();
+        if (isDone) {
+            this.markAsDone();
+        }
     }
 
     /**
@@ -44,6 +46,7 @@ public class DeadlineTask extends Task {
 
     @Override
     public String serialise() {
-        return String.format("D|%s|%s|%s", this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.deadline));
+        return String.format("D|%s|%s|%s",
+            this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.deadline));
     }
 }

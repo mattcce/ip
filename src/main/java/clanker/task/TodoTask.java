@@ -12,7 +12,9 @@ public class TodoTask extends Task {
      */
     public TodoTask(String description, boolean isDone) {
         this(description);
-        if (isDone) this.markAsDone();
+        if (isDone) {
+            this.markAsDone();
+        }
     }
 
     /**
