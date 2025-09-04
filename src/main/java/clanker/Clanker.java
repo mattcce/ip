@@ -66,8 +66,6 @@ public class Clanker {
 
         todoList = Serde.deserialise(data);
 
-        System.out.println("Here.");
-
         String[] greetings = new String[]{
             "Hello! I'm Clanker.",
             "What can I do you for today?",
