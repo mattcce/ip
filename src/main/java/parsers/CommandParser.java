@@ -8,7 +8,25 @@ import java.util.HashMap;
  */
 public class CommandParser {
     /**
+     * <p>
      * Parses a command into a queryable structure.
+     * </p>
+     * <p>
+     * The parser recognises the following grammar (in EBNF):
+     * </p>
+     * <pre>
+     * {@code
+     * <command> ::= <imperative> (<separator> <parameters>)? (<separator> <options>)*
+     * <imperative> ::= <word>
+     * <parameters> ::= <word> (<separator> <word>)*
+     * <options> ::= "/" <option_key> (<separator> <option_value>)?
+     * <option_key> ::= <word>
+     * <option_value> ::= <word> (<separator> <word>)*
+     *
+     * <word> ::= ([A-z] | [0-9])+
+     * <separator> ::= " "+
+     * }
+     * </pre>
      *
      * @param cmd The full string of the command.
      * @return A queryable Command.
