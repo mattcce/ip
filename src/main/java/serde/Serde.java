@@ -37,12 +37,15 @@ public class Serde {
 
             switch (taskString[0]) {
             case "T":
+                assert taskString.length >= 3 : "stored todo task has insufficient number of fields";
                 tasks.add(new TodoTask(taskString[2], taskString[1].equals("X")));
                 break;
             case "D":
+                assert taskString.length >= 4 : "stored deadline task has insufficient number of fields";
                 tasks.add(new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X")));
                 break;
             case "E":
+                assert taskString.length >= 5 : "stored event task has insufficient number of fields";
                 tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
                 break;
             default:
