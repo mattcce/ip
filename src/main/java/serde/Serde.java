@@ -31,7 +31,9 @@ public class Serde {
      */
     public static TodoList deserialise(String s) {
         String[] taskStrings = s.split("\n");
+
         TodoList todoList = new TodoList();
+
         for (String ts : taskStrings) {
             todoList.addTask(deserialiseTask(ts));
         }
