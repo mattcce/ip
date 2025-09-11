@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import clanker.task.DeadlineTask;
@@ -24,8 +25,22 @@ import ui.utils.Writer;
  */
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
+    private static final String[] VALID_IMPERATIVES = new String[]{
+        "todo",
+        "deadline",
+        "event",
+        "list",
+        "mark",
+        "unmark",
+        "delete",
+        "find",
+        "bye",
+        "serialise",
+    };
+
     private final Writer writer;
     private TodoList todoList = new TodoList();
+
 
     /**
      * Creates a new clanker.
@@ -96,7 +111,9 @@ public class Clanker {
     public void handleCommand(String input) {
         Command cmd = CommandParser.parse(input);
 
-        switch (cmd.getImperative()) {
+        String resolvedImperative = resolveCommandImperative(cmd.getImperative());
+
+        switch (resolvedImperative) {
         case "todo":
             this.handleTodoTask(cmd);
             break;
@@ -304,5 +321,17 @@ public class Clanker {
         };
 
         this.displayPrompt(exiting);
+    }
+
+    private String resolveCommandImperative(String hint) {
+        String[] candidates = Arrays.stream(VALID_IMPERATIVES)
+            .filter(fullImperative -> fullImperative.startsWith(hint))
+            .toArray(String[]::new);
+
+        if (candidates.length == 1) {
+            return candidates[0];
+        } else {
+            return "";
+        }
     }
 }
