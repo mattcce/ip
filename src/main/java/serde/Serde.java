@@ -1,6 +1,6 @@
 package serde;
 
-import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import clanker.TodoList;
 import clanker.task.DeadlineTask;
@@ -31,33 +31,28 @@ public class Serde {
      */
     public static TodoList deserialise(String s) {
         String[] taskStrings = s.split("\n");
-        ArrayList<Task> tasks = new ArrayList<>();
-        for (String ts : taskStrings) {
-            String[] taskString = ts.split("\\|");
-
-            switch (taskString[0]) {
-            case "T":
-                assert taskString.length >= 3 : "stored todo task has insufficient number of fields";
-                tasks.add(new TodoTask(taskString[2], taskString[1].equals("X")));
-                break;
-            case "D":
-                assert taskString.length >= 4 : "stored deadline task has insufficient number of fields";
-                tasks.add(new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X")));
-                break;
-            case "E":
-                assert taskString.length >= 5 : "stored event task has insufficient number of fields";
-                tasks.add(new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X")));
-                break;
-            default:
-                break;
-            }
-        }
 
         TodoList todoList = new TodoList();
-        for (Task t : tasks) {
-            todoList.addTask(t);
+
+        for (String ts : taskStrings) {
+            todoList.addTask(deserialiseTask(ts));
         }
 
         return todoList;
+    }
+
+    private static Task deserialiseTask(String ts) {
+        String[] taskString = ts.split("\\|");
+
+        switch (taskString[0]) {
+        case "T":
+            return new TodoTask(taskString[2], taskString[1].equals("X"));
+        case "D":
+            return new DeadlineTask(taskString[2], taskString[3], taskString[1].equals("X"));
+        case "E":
+            return new EventTask(taskString[2], taskString[3], taskString[4], taskString[1].equals("X"));
+        default:
+            throw new InputMismatchException(String.format("Invalid task type: %s", taskString[0]));
+        }
     }
 }
