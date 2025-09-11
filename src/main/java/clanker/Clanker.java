@@ -8,9 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import clanker.command.AmbiguousOperationException;
 import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
 import clanker.task.Task;
@@ -40,7 +40,6 @@ public class Clanker {
 
     private final Writer writer;
     private TodoList todoList = new TodoList();
-
 
     /**
      * Creates a new clanker.
@@ -111,46 +110,19 @@ public class Clanker {
     public void handleCommand(String input) {
         Command cmd = CommandParser.parse(input);
 
-        String resolvedImperative = resolveCommandImperative(cmd.getImperative());
+        Binding binding;
 
-        switch (resolvedImperative) {
-        case "todo":
-            this.handleTodoTask(cmd);
-            break;
-        case "deadline":
-            this.handleDeadlineTask(cmd);
-            break;
-        case "event":
-            this.handleEventTask(cmd);
-            break;
-        case "list":
-            this.handleList();
-            break;
-        case "mark":
-            this.handleMark(cmd);
-            break;
-        case "unmark":
-            this.handleUnmark(cmd);
-            break;
-        case "delete":
-            this.handleDelete(cmd);
-            break;
-        case "find":
-            this.handleFind(cmd);
-            break;
-        case "bye":
-            this.handleExit();
-            break;
-        case "serialise":
-            this.handleSerialise();
-            break;
-        default:
+        try {
+            binding = Binding.resolveBinding(cmd);
+            binding.getHandler().handle(this, cmd);
+        } catch (UnsupportedOperationException e) {
             this.displayPrompt("Unknown command!");
-            break;
+        } catch (AmbiguousOperationException e) {
+            this.displayPrompt("Hmm... I can't tell what command you want. Be more specific.", e.getMessage());
         }
     }
 
-    private void handleTodoTask(CommandParser.Command cmd) {
+    void handleTodoTask(Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -167,7 +139,7 @@ public class Clanker {
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private void handleDeadlineTask(CommandParser.Command cmd) {
+    void handleDeadlineTask(Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -198,7 +170,7 @@ public class Clanker {
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private void handleEventTask(CommandParser.Command cmd) {
+    void handleEventTask(Command cmd) {
         String description = String.join(" ", cmd.getAllParameters());
 
         if (description.isEmpty()) {
@@ -223,7 +195,7 @@ public class Clanker {
             String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
-    private void handleList() {
+    void handleList(Command cmd) {
         List<String> tasks = todoList.listTasks();
         ArrayList<String> prompt = new ArrayList<>(todoList.size() + 1);
 
@@ -238,8 +210,15 @@ public class Clanker {
         this.displayPrompt(prompt.toArray(String[]::new));
     }
 
-    private void handleMark(CommandParser.Command cmd) {
-        int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
+    void handleMark(Command cmd) {
+        int taskIndex;
+
+        try {
+            taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            this.displayPrompt("You must provide a valid index!");
+            return;
+        }
 
         try {
             todoList.markAsDone(taskIndex);
@@ -254,8 +233,15 @@ public class Clanker {
         );
     }
 
-    private void handleUnmark(CommandParser.Command cmd) {
-        int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
+    void handleUnmark(Command cmd) {
+        int taskIndex;
+
+        try {
+            taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            this.displayPrompt("You must provide a valid index!");
+            return;
+        }
 
         try {
             todoList.markAsUndone(taskIndex);
@@ -270,7 +256,7 @@ public class Clanker {
         );
     }
 
-    private void handleDelete(CommandParser.Command cmd) {
+    void handleDelete(Command cmd) {
         int taskIndex = Integer.parseInt(cmd.getParameter(0)) - 1;
 
         Task t;
@@ -287,7 +273,7 @@ public class Clanker {
         );
     }
 
-    private void handleFind(CommandParser.Command cmd) {
+    void handleFind(Command cmd) {
         String searchString = String.join(" ", cmd.getAllParameters());
         List<Pair<Integer, String>> tasks = todoList.filterByDescription((s) -> s.contains(searchString));
         ArrayList<String> prompt = new ArrayList<>();
@@ -301,13 +287,13 @@ public class Clanker {
         this.displayPrompt(prompt.toArray(String[]::new));
     }
 
-    private void handleSerialise() {
+    void handleSerialise(Command cmd) {
         String serialised = Serde.serialise(todoList);
 
         this.displayPrompt(serialised);
     }
 
-    private void handleExit() {
+    void handleExit(Command cmd) {
         String serialised = Serde.serialise(todoList);
 
         try {
@@ -321,17 +307,5 @@ public class Clanker {
         };
 
         this.displayPrompt(exiting);
-    }
-
-    private String resolveCommandImperative(String hint) {
-        String[] candidates = Arrays.stream(VALID_IMPERATIVES)
-            .filter(fullImperative -> fullImperative.startsWith(hint))
-            .toArray(String[]::new);
-
-        if (candidates.length == 1) {
-            return candidates[0];
-        } else {
-            return "";
-        }
     }
 }
