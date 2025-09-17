@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clanker.command.AmbiguousOperationException;
+import clanker.command.UnknownOperationException;
 import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
 import clanker.task.Task;
@@ -115,7 +116,7 @@ public class Clanker {
         try {
             binding = Binding.resolveBinding(cmd);
             binding.getHandler().handle(this, cmd);
-        } catch (UnsupportedOperationException e) {
+        } catch (UnknownOperationException e) {
             this.displayPrompt("Unknown command!");
         } catch (AmbiguousOperationException e) {
             this.displayPrompt("Hmm... I can't tell what command you want. Be more specific.", e.getMessage());

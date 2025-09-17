@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import clanker.command.AmbiguousOperationException;
 import clanker.command.CommandHandler;
+import clanker.command.UnknownOperationException;
 import parsers.CommandParser;
 
 /**
@@ -35,7 +36,7 @@ public enum Binding {
      * @param cmd Parsed command.
      * @return Relevant binding.
      */
-    public static Binding resolveBinding(CommandParser.Command cmd) {
+    public static Binding resolveBinding(CommandParser.Command cmd) throws UnknownOperationException, AmbiguousOperationException {
         String imperativeHint = cmd.getImperative();
         Binding[] candidates = Arrays.stream(Binding.values())
             .filter(b -> isCandidate(b.fullImperative, imperativeHint))
@@ -44,7 +45,7 @@ public enum Binding {
         if (candidates.length == 1) {
             return candidates[0];
         } else if (candidates.length == 0) {
-            throw new UnsupportedOperationException();
+            throw new UnknownOperationException();
         } else if (candidates.length > 1) {
             throw new AmbiguousOperationException(Arrays.stream(candidates)
                 .map(b -> b.fullImperative)
