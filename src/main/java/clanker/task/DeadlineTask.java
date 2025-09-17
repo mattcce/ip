@@ -47,6 +47,6 @@ public class DeadlineTask extends Task {
     @Override
     public String serialise() {
         return String.format("D|%s|%s|%s",
-            this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.deadline));
+                this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.deadline));
     }
 }

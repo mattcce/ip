@@ -50,13 +50,13 @@ public class EventTask extends Task {
     @Override
     public String toString() {
         return String.format("[E] %s (from: %s to: %s)",
-            super.toString(), DateTimeParser.display(this.start), DateTimeParser.display(this.end));
+                super.toString(), DateTimeParser.display(this.start), DateTimeParser.display(this.end));
     }
 
     @Override
     public String serialise() {
         return String.format("E|%s|%s|%s|%s",
-            this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.start),
-            DateTimeParser.unparse(this.end));
+                this.isDone() ? "X" : "O", this.getDescription(), DateTimeParser.unparse(this.start),
+                DateTimeParser.unparse(this.end));
     }
 }

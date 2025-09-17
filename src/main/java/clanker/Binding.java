@@ -36,11 +36,12 @@ public enum Binding {
      * @param cmd Parsed command.
      * @return Relevant binding.
      */
-    public static Binding resolveBinding(CommandParser.Command cmd) throws UnknownOperationException, AmbiguousOperationException {
+    public static Binding resolveBinding(CommandParser.Command cmd)
+            throws UnknownOperationException, AmbiguousOperationException {
         String imperativeHint = cmd.getImperative();
         Binding[] candidates = Arrays.stream(Binding.values())
-            .filter(b -> isCandidate(b.fullImperative, imperativeHint))
-            .toArray(Binding[]::new);
+                .filter(b -> isCandidate(b.fullImperative, imperativeHint))
+                .toArray(Binding[]::new);
 
         if (candidates.length == 1) {
             return candidates[0];
@@ -48,8 +49,8 @@ public enum Binding {
             throw new UnknownOperationException();
         } else if (candidates.length > 1) {
             throw new AmbiguousOperationException(Arrays.stream(candidates)
-                .map(b -> b.fullImperative)
-                .toArray(String[]::new));
+                    .map(b -> b.fullImperative)
+                    .toArray(String[]::new));
         } else {
             // unreachable
             throw new RuntimeException();

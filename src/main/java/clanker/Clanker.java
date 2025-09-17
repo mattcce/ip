@@ -26,18 +26,6 @@ import ui.utils.Writer;
  */
 public class Clanker {
     private static final Path STORE_PATH = Path.of("./task_store.txt");
-    private static final String[] VALID_IMPERATIVES = new String[]{
-        "todo",
-        "deadline",
-        "event",
-        "list",
-        "mark",
-        "unmark",
-        "delete",
-        "find",
-        "bye",
-        "serialise",
-    };
 
     private final Writer writer;
     private TodoList todoList = new TodoList();
@@ -81,10 +69,7 @@ public class Clanker {
 
         todoList = Serde.deserialise(data);
 
-        String[] greetings = new String[]{
-            "Hello! I'm Clanker.",
-            "What can I do you for today?",
-        };
+        String[] greetings = new String[]{"Hello! I'm Clanker.", "What can I do you for today?"};
         this.displayPrompt(greetings);
     }
 
@@ -136,8 +121,8 @@ public class Clanker {
         todoList.addTask(task);
 
         this.displayPrompt("Added new task:",
-            task.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                task.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     void handleDeadlineTask(Command cmd) {
@@ -160,15 +145,15 @@ public class Clanker {
             task = new DeadlineTask(description, deadline);
         } catch (DateTimeParseException e) {
             this.displayPrompt(
-                "Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
+                    "Oops! You need to provide a date/time in the format: yyyy-mm-dd hhmm (hhmm is in 24hr time!)");
             return;
         }
 
         todoList.addTask(task);
 
         this.displayPrompt("Added new task:",
-            task.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                task.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     void handleEventTask(Command cmd) {
@@ -192,8 +177,8 @@ public class Clanker {
         todoList.addTask(task);
 
         this.displayPrompt("Added new task:",
-            task.toString(),
-            String.format("There are now %d tasks in your list.", todoList.size()));
+                task.toString(),
+                String.format("There are now %d tasks in your list.", todoList.size()));
     }
 
     void handleList(Command cmd) {
@@ -229,8 +214,8 @@ public class Clanker {
         }
 
         this.displayPrompt(
-            "Marked task as done:",
-            todoList.getTask(taskIndex).toString()
+                "Marked task as done:",
+                todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -252,8 +237,8 @@ public class Clanker {
         }
 
         this.displayPrompt(
-            "Marked task as not done:",
-            todoList.getTask(taskIndex).toString()
+                "Marked task as not done:",
+                todoList.getTask(taskIndex).toString()
         );
     }
 
@@ -269,8 +254,8 @@ public class Clanker {
         }
 
         this.displayPrompt(
-            "Deleted this task:",
-            t.toString()
+                "Deleted this task:",
+                t.toString()
         );
     }
 
@@ -303,9 +288,7 @@ public class Clanker {
             this.displayPrompt("Failed to write to local storage: this session will not be saved!");
         }
 
-        String[] exiting = new String[]{
-            "Bye. Hope to see you again soon!"
-        };
+        String[] exiting = new String[]{"Bye. Hope to see you again soon!"};
 
         this.displayPrompt(exiting);
     }

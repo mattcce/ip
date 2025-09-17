@@ -14,8 +14,9 @@ import ui.components.DialogBox;
  * Controller for the main GUI.
  */
 public class Window extends AnchorPane {
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/assets/monke.jpg"));
+    private final Image clankerImage = new Image(this.getClass().getResourceAsStream("/assets/clanker.jpg"));
     private Clanker clanker;
-
     @FXML
     private ScrollPane scrollPane = new ScrollPane();
     @FXML
@@ -24,9 +25,6 @@ public class Window extends AnchorPane {
     private TextField userInput = new TextField();
     @FXML
     private Button sendButton = new Button("Send");
-
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/assets/monke.jpg"));
-    private Image clankerImage = new Image(this.getClass().getResourceAsStream("/assets/clanker.jpg"));
 
     /**
      * Constructs main window with all base components.
