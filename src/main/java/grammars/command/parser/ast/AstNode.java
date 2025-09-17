@@ -2,14 +2,27 @@ package grammars.command.parser.ast;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract class for all AST nodes.
+ */
 public abstract class AstNode {
     public abstract <R> R accept(AstVisitor<R> visitor);
 
+    /**
+     * Command AST node.
+     */
     public static class Command extends AstNode {
         private final Imperative imperative;
         private final ParameterList parameterList;
         private final OptionList optionList;
 
+        /**
+         * Constructs a new Command node.
+         *
+         * @param imperative    Imperative node.
+         * @param parameterList ParameterList node.
+         * @param optionList    OptionList node.
+         */
         public Command(Imperative imperative, ParameterList parameterList, OptionList optionList) {
             this.imperative = imperative;
             this.parameterList = parameterList;
@@ -34,13 +47,16 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Imperative AST node.
+     */
     public static class Imperative extends AstNode {
         private final Word word;
 
         /**
          * Constructs a new Imperative node.
          *
-         * @param word Imperative word.
+         * @param word Word node.
          */
         public Imperative(Word word) {
             this.word = word;
@@ -56,6 +72,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Parameter List AST node.
+     */
     public static class ParameterList extends AstNode {
         private final ArrayList<Parameter> parameters;
 
@@ -73,6 +92,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Parameter AST node.
+     */
     public static class Parameter extends AstNode {
         private final Word word;
 
@@ -90,6 +112,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * OptionList AST node.
+     */
     public static class OptionList extends AstNode {
         private final ArrayList<Option> options;
 
@@ -107,10 +132,19 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Option AST node.
+     */
     public static class Option extends AstNode {
         private final OptionName optionName;
         private final OptionValue optionValue;
 
+        /**
+         * Constructs a new Option node.
+         *
+         * @param optionName  OptionName node.
+         * @param optionValue OptionValue node.
+         */
         public Option(OptionName optionName, OptionValue optionValue) {
             this.optionName = optionName;
             this.optionValue = optionValue;
@@ -130,6 +164,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Option Name AST node.
+     */
     public static class OptionName extends AstNode {
         private final Word word;
 
@@ -147,6 +184,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Option Value AST node.
+     */
     public static class OptionValue extends AstNode {
         private final Text text;
 
@@ -164,6 +204,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Text AST node.
+     */
     public static class Text extends AstNode {
         private final String text;
 
@@ -181,6 +224,9 @@ public abstract class AstNode {
         }
     }
 
+    /**
+     * Word AST node.
+     */
     public static class Word extends AstNode {
         private final String word;
 

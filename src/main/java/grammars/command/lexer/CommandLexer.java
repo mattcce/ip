@@ -34,7 +34,7 @@ public class CommandLexer {
      * @return A TokenisedCommand consisting of the lexed tokens.
      * @throws LexerException When an error occurs during lexing.
      */
-    public static TokenisedCommand lex(String ingest) throws LexerException {
+    public static TokenisedCommand lexCommand(String ingest) throws LexerException {
         CommandLexer lexer = new CommandLexer(ingest);
         lexer.lex();
         return lexer.toTokenisedCommand();
@@ -147,6 +147,10 @@ public class CommandLexer {
         }
     }
 
+    private char peek() {
+        return ingest.charAt(current);
+    }
+
     private char advance() {
         char c = ingest.charAt(current);
         current += 1;
@@ -166,10 +170,6 @@ public class CommandLexer {
         while (!this.isAtEnd() && isCharacterOfWord(this.peek())) {
             this.advance();
         }
-    }
-
-    private char peek() {
-        return ingest.charAt(current);
     }
 
     private void munchText() throws LexerException {

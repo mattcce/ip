@@ -1,5 +1,10 @@
 package grammars.command.parser.ast;
 
+/**
+ * Visitor pattern interface for AST traversal and operations.
+ *
+ * @param <R> Return type of the visitor.
+ */
 public interface AstVisitor<R> {
     R visitCommand(AstNode.Command node);
 

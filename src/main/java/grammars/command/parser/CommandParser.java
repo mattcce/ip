@@ -35,8 +35,15 @@ public class CommandParser {
         this.tokenisedCommand = tokenisedCommand;
     }
 
+    /**
+     * Parses an input command.
+     *
+     * @param command Command string to be parsed.
+     * @return Command AST node (root).
+     * @throws LexerException If the string fails to lex.
+     */
     public static AstNode.Command parse(String command) throws LexerException {
-        CommandParser parser = new CommandParser(CommandLexer.lex(command));
+        CommandParser parser = new CommandParser(CommandLexer.lexCommand(command));
         return parser.parseCommand();
     }
 
@@ -129,7 +136,6 @@ public class CommandParser {
         if (!this.isAtEnd()) {
             this.currentTokenIndex += 1;
         }
-        ;
 
         return token;
     }
