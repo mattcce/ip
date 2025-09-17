@@ -15,7 +15,15 @@ public class TokenisedCommand {
         this.tokens = tokens;
     }
 
+    public String getIngest() {
+        return this.ingest;
+    }
+
     public Stream<Token> stream() {
         return this.tokens.stream();
+    }
+
+    public Token getAtIndex(int index) {
+        return this.tokens.get(index);
     }
 }
