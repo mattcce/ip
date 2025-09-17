@@ -1,10 +1,10 @@
-package parsers;
+package grammars;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Utility class for parsing commands.
+ * Parser class for commands, written
  */
 public class CommandParser {
     /**

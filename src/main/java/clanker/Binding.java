@@ -5,7 +5,7 @@ import java.util.Arrays;
 import clanker.command.AmbiguousOperationException;
 import clanker.command.CommandHandler;
 import clanker.command.UnknownOperationException;
-import parsers.CommandParser;
+import grammars.CommandParser;
 
 /**
  * Stores all commands and associated features (e.g. handlers).

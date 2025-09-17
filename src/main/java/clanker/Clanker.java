@@ -1,6 +1,6 @@
 package clanker;
 
-import static parsers.CommandParser.Command;
+import static grammars.CommandParser.Command;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,8 +16,8 @@ import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
 import clanker.task.Task;
 import clanker.task.TodoTask;
+import grammars.CommandParser;
 import javafx.util.Pair;
-import parsers.CommandParser;
 import serde.Serde;
 import ui.utils.Writer;
 

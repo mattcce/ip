@@ -1,7 +1,7 @@
 package clanker.command;
 
 import clanker.Clanker;
-import parsers.CommandParser;
+import grammars.CommandParser;
 
 /**
  * Functional interface for command handlers.

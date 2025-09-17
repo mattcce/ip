@@ -1,7 +1,7 @@
 package clanker.command;
 
 import clanker.Clanker;
-import parsers.CommandParser;
+import grammars.CommandParser;
 
 /**
  * Stub for CommandHandler.
