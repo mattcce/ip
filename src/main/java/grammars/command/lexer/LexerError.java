@@ -1,18 +1,22 @@
 package grammars.command.lexer;
 
+import static grammars.command.utils.Utils.makeVisualDelimiter;
+
 import java.util.ArrayList;
+
+import grammars.command.utils.Location;
 
 /**
  * Errors encountered by the lexer.
  */
 class LexerError {
-    private final ErrorType errorType;
+    private final LexerErrorType lexerErrorType;
     private final String ingest;
     private final String offendingLiteral;
     private final Location location;
 
-    LexerError(ErrorType errorType, String ingest, String offendingLiteral, Location location) {
-        this.errorType = errorType;
+    LexerError(LexerErrorType lexerErrorType, String ingest, String offendingLiteral, Location location) {
+        this.lexerErrorType = lexerErrorType;
         this.ingest = ingest;
         this.offendingLiteral = offendingLiteral;
         this.location = location;
@@ -28,32 +32,8 @@ class LexerError {
 
         lines.add(makeVisualDelimiter(this.location.start(), this.location.end()));
 
-        lines.add(String.format("%s: %s", this.errorType.getGenericDescription(), this.offendingLiteral));
+        lines.add(String.format("%s: %s", this.lexerErrorType.getGenericDescription(), this.offendingLiteral));
 
         return String.join("\n", lines);
-    }
-
-    private String makeVisualDelimiter(int start, int end) {
-        StringBuilder sb = new StringBuilder();
-        int current = 0;
-
-        while (current < start) {
-            sb.append(" ");
-            current++;
-        }
-
-        sb.append("^");
-        current++;
-
-        while (current < end - 1) {
-            sb.append("-");
-            current++;
-        }
-
-        if (current == end - 1) {
-            sb.append("^");
-        }
-
-        return sb.toString();
     }
 }

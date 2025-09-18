@@ -2,6 +2,8 @@ package grammars.command.lexer;
 
 import java.util.ArrayList;
 
+import grammars.command.utils.Location;
+
 /**
  * Lexer for commands. Recognises the following regular grammar (Level 3):
  *
@@ -142,7 +144,7 @@ public class CommandLexer {
             // ignore whitespace
             break;
         default:
-            this.error(ErrorType.UNEXPECTED_CHARACTER);
+            this.error(LexerErrorType.UNEXPECTED_CHARACTER);
             break;
         }
     }
@@ -178,13 +180,13 @@ public class CommandLexer {
         }
 
         if (this.isAtEnd()) {
-            this.error(ErrorType.UNTERMINATED_STRING);
+            this.error(LexerErrorType.UNTERMINATED_STRING);
         }
 
         this.advance(); // closing quote
     }
 
-    private void error(ErrorType type) throws LexerException {
+    private void error(LexerErrorType type) throws LexerException {
         String offendingLiteral = this.ingest.substring(start, current);
         LexerError lexerError = new LexerError(type, this.ingest, offendingLiteral, new Location(start, current));
         throw new LexerException(lexerError);

@@ -3,13 +3,13 @@ package grammars.command.lexer;
 /**
  * Enumeration of all error types the lexer may encounter.
  */
-enum ErrorType {
+enum LexerErrorType {
     UNEXPECTED_CHARACTER("Unexpected character"),
     UNTERMINATED_STRING("Unterminated string");
 
     private final String genericDescription;
 
-    ErrorType(String genericDescription) {
+    LexerErrorType(String genericDescription) {
         this.genericDescription = genericDescription;
     }
 

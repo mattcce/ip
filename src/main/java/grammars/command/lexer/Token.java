@@ -1,5 +1,7 @@
 package grammars.command.lexer;
 
+import grammars.command.utils.Location;
+
 /**
  * Lexer tokens.
  */
@@ -20,6 +22,10 @@ public class Token {
 
     public String getLiteral() {
         return this.literal;
+    }
+
+    public Location getLocation() {
+        return this.location;
     }
 
     @Override
