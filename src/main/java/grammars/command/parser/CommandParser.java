@@ -2,8 +2,6 @@ package grammars.command.parser;
 
 import java.util.ArrayList;
 
-import grammars.command.lexer.CommandLexer;
-import grammars.command.lexer.LexerException;
 import grammars.command.lexer.Token;
 import grammars.command.lexer.TokenType;
 import grammars.command.lexer.TokenisedCommand;
@@ -38,12 +36,12 @@ public class CommandParser {
     /**
      * Parses an input command.
      *
-     * @param command Command string to be parsed.
+     * @param command Tokenised command to be parsed.
      * @return Command AST node (root).
-     * @throws LexerException If the string fails to lex.
+     * @throws ParserException If the command fails to be parsed.
      */
-    public static AstNode.Command parse(String command) throws LexerException, ParserException {
-        CommandParser parser = new CommandParser(CommandLexer.lexCommand(command));
+    public static AstNode.Command parseCommand(TokenisedCommand command) throws ParserException {
+        CommandParser parser = new CommandParser(command);
 
         AstNode.Command root;
         try {

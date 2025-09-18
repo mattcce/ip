@@ -51,6 +51,7 @@ public class Utils {
      */
     public static <T> ArrayList<T> reverseArrayList(ArrayList<T> arrayList) {
         int count = arrayList.size();
-        return IntStream.range(0, count).map(i -> (count - 1) - i).boxed().map(arrayList::get).collect(Collectors.toCollection(ArrayList::new));
+        return IntStream.range(0, count).map(i -> (count - 1) - i).boxed()
+                .map(arrayList::get).collect(Collectors.toCollection(ArrayList::new));
     }
 }

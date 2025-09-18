@@ -1,12 +1,12 @@
 package clanker.command;
 
 import clanker.Clanker;
-import grammars.CommandParser;
+import grammars.command.Command;
 
 /**
  * Functional interface for command handlers.
  */
 @FunctionalInterface
 public interface CommandHandler {
-    void handle(Clanker c, CommandParser.Command cmd);
+    void handle(Clanker c, Command cmd);
 }

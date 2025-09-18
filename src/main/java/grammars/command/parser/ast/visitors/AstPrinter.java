@@ -11,7 +11,10 @@ import grammars.command.parser.ast.AstVisitor;
  */
 public class AstPrinter implements AstVisitor<String> {
     /**
-     * Public entry point to print any AST node.
+     * Returns a pretty-printed string representation of the given AST.
+     *
+     * @param node Root of the AST.
+     * @return Pretty-printed string representation of given AST.
      */
     public String print(AstNode node) {
         return node.accept(this);
