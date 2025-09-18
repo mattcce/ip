@@ -1,15 +1,16 @@
-package parsers;
+package grammars.command;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class CommandParserTest {
+public class CommandTest {
     @Test
     public void parse_simpleCommand_success() {
         String cmdString = "test";
 
-        CommandParser.Command cmd = CommandParser.parse(cmdString);
+        Command cmd = assertDoesNotThrow(() -> Command.parse(cmdString));
 
         assertEquals("test", cmd.getImperative());
         assertEquals(0, cmd.getAllParameters().length);
@@ -19,7 +20,7 @@ public class CommandParserTest {
     public void parse_simpleCommandWithParameters_success() {
         String cmdString = "test param0 param1";
 
-        CommandParser.Command cmd = CommandParser.parse(cmdString);
+        Command cmd = assertDoesNotThrow(() -> Command.parse(cmdString));
 
         assertEquals("test", cmd.getImperative());
         assertEquals(2, cmd.getAllParameters().length);
@@ -29,9 +30,9 @@ public class CommandParserTest {
 
     @Test
     public void parse_commandWithOptions_success() {
-        String cmdString = "test /opt1 long value /opt2 single";
+        String cmdString = "test /opt1:\"long value\" /opt2:\"single\"";
 
-        CommandParser.Command cmd = CommandParser.parse(cmdString);
+        Command cmd = assertDoesNotThrow(() -> Command.parse(cmdString));
 
         assertEquals("test", cmd.getImperative());
         assertEquals(0, cmd.getAllParameters().length);
@@ -41,9 +42,9 @@ public class CommandParserTest {
 
     @Test
     public void parse_complexCommand_success() {
-        String cmdString = "complex param0 param1 /opt1 long value /opt2 single";
+        String cmdString = "complex param0 param1 /opt1:\"long value\" /opt2:\"single\"";
 
-        CommandParser.Command cmd = CommandParser.parse(cmdString);
+        Command cmd = assertDoesNotThrow(() -> Command.parse(cmdString));
 
         assertEquals("complex", cmd.getImperative());
         assertEquals(2, cmd.getAllParameters().length);

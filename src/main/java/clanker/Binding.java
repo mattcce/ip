@@ -5,7 +5,7 @@ import java.util.Arrays;
 import clanker.command.AmbiguousOperationException;
 import clanker.command.CommandHandler;
 import clanker.command.UnknownOperationException;
-import parsers.CommandParser;
+import grammars.command.Command;
 
 /**
  * Stores all commands and associated features (e.g. handlers).
@@ -36,7 +36,7 @@ public enum Binding {
      * @param cmd Parsed command.
      * @return Relevant binding.
      */
-    public static Binding resolveBinding(CommandParser.Command cmd)
+    public static Binding resolveBinding(Command cmd)
             throws UnknownOperationException, AmbiguousOperationException {
         String imperativeHint = cmd.getImperative();
         Binding[] candidates = Arrays.stream(Binding.values())

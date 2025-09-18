@@ -1,7 +1,7 @@
 package clanker.command;
 
 import clanker.Clanker;
-import parsers.CommandParser;
+import grammars.command.Command;
 
 /**
  * Stub for CommandHandler.
@@ -14,7 +14,7 @@ public class CommandHandlerStub implements CommandHandler {
     }
 
     @Override
-    public void handle(Clanker c, CommandParser.Command cmd) {
+    public void handle(Clanker c, Command cmd) {
         this.hasBeenExecuted = true;
     }
 }

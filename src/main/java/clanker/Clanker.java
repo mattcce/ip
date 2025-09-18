@@ -1,7 +1,5 @@
 package clanker;
 
-import static parsers.CommandParser.Command;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,8 +14,10 @@ import clanker.task.DeadlineTask;
 import clanker.task.EventTask;
 import clanker.task.Task;
 import clanker.task.TodoTask;
+import grammars.command.Command;
+import grammars.command.lexer.LexerException;
+import grammars.command.parser.ParserException;
 import javafx.util.Pair;
-import parsers.CommandParser;
 import serde.Serde;
 import ui.utils.Writer;
 
@@ -94,7 +94,14 @@ public class Clanker {
      * @param input User command, given as one string.
      */
     public void handleCommand(String input) {
-        Command cmd = CommandParser.parse(input);
+        Command cmd;
+
+        try {
+            cmd = Command.parse(input);
+        } catch (LexerException | ParserException e) {
+            this.displayPrompt("Hmm... I can't understand your command.", e.getMessage());
+            return;
+        }
 
         Binding binding;
 
