@@ -5,13 +5,13 @@ import java.util.ArrayList;
 /**
  * Errors encountered by the lexer.
  */
-class Error {
+class LexerError {
     private final ErrorType errorType;
     private final String ingest;
     private final String offendingLiteral;
     private final Location location;
 
-    Error(ErrorType errorType, String ingest, String offendingLiteral, Location location) {
+    LexerError(ErrorType errorType, String ingest, String offendingLiteral, Location location) {
         this.errorType = errorType;
         this.ingest = ingest;
         this.offendingLiteral = offendingLiteral;

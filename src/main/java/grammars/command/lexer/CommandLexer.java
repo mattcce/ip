@@ -186,8 +186,8 @@ public class CommandLexer {
 
     private void error(ErrorType type) throws LexerException {
         String offendingLiteral = this.ingest.substring(start, current);
-        Error error = new Error(type, this.ingest, offendingLiteral, new Location(start, current));
-        throw new LexerException(error);
+        LexerError lexerError = new LexerError(type, this.ingest, offendingLiteral, new Location(start, current));
+        throw new LexerException(lexerError);
     }
 
     private TokenisedCommand toTokenisedCommand() {
