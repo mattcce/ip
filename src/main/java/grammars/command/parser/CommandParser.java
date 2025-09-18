@@ -10,8 +10,8 @@ import grammars.command.lexer.TokenisedCommand;
 import grammars.command.parser.ast.AstNode;
 
 /**
- * Parser for commands. Recognises the following context-free grammar (Level 2) consisting of tokens obtained from the
- * lexer (tokens from lexer are in CAPITAL:
+ * LL(1) parser for commands. Recognises the following context-free grammar (Level 2) consisting of tokens obtained from
+ * the lexer (tokens from lexer are in CAPITAL):
  * <pre>
  * {@code
  * command          → imperative parameter_list option_list TERMINAL
