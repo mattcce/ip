@@ -290,6 +290,10 @@ public class Clanker {
         String serialised = Serde.serialise(todoList);
 
         try {
+            if (!Files.exists(STORE_PATH)) {
+                Files.createFile(STORE_PATH);
+            }
+
             Files.writeString(STORE_PATH, serialised, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             this.displayPrompt("Failed to write to local storage: this session will not be saved!");

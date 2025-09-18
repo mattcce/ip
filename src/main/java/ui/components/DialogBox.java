@@ -13,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import ui.Window;
 
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face and a label containing text from
@@ -27,7 +26,7 @@ public class DialogBox extends HBox {
 
     private DialogBox(String text, Image img) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Window.class.getResource("/style/DialogBox.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/style/DialogBox.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();

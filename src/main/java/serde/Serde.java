@@ -30,9 +30,13 @@ public class Serde {
      * @return TodoList obtained by deserialising the input.
      */
     public static TodoList deserialise(String s) {
-        String[] taskStrings = s.split("\n");
-
         TodoList todoList = new TodoList();
+
+        if (s.isEmpty()) {
+            return todoList;
+        }
+
+        String[] taskStrings = s.split("\n");
 
         for (String ts : taskStrings) {
             todoList.addTask(deserialiseTask(ts));
