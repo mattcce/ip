@@ -1,4 +1,6 @@
-package grammars.command.parser.ast;
+package grammars.command.parser.ast.visitors;
+
+import grammars.command.parser.ast.AstNode;
 
 /**
  * Visitor pattern interface for AST traversal and operations.

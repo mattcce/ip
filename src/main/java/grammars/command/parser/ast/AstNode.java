@@ -2,6 +2,8 @@ package grammars.command.parser.ast;
 
 import java.util.ArrayList;
 
+import grammars.command.parser.ast.visitors.AstVisitor;
+
 /**
  * Abstract class for all AST nodes.
  */

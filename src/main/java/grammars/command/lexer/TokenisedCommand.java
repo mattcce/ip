@@ -1,7 +1,6 @@
 package grammars.command.lexer;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
  * Lexed command, representing a linear stream of tokens.
@@ -19,11 +18,13 @@ public class TokenisedCommand {
         return this.ingest;
     }
 
-    public Stream<Token> stream() {
-        return this.tokens.stream();
-    }
-
     public Token getAtIndex(int index) {
         return this.tokens.get(index);
+    }
+
+    @Override
+    public String toString() {
+        String[] tokens = this.tokens.stream().map(t -> t.toString()).toArray(String[]::new);
+        return String.join("\n", tokens);
     }
 }

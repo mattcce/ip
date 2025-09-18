@@ -30,7 +30,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return String.format("[%02d:%02d] %s %s",
+        return String.format("[%02d:%02d] %s : %s",
                 this.location.start(), this.location.end(), this.type.getDescription(), this.literal);
     }
 }

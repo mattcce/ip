@@ -2,7 +2,6 @@ package grammars.command.parser.ast.visitors;
 
 import grammars.command.Command;
 import grammars.command.parser.ast.AstNode;
-import grammars.command.parser.ast.AstVisitor;
 
 /**
  * Extractor for commands from a complete AST.

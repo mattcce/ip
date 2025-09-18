@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grammars.command.parser.ast.AstNode;
-import grammars.command.parser.ast.AstVisitor;
 
 /**
  * Traverses an AST and builds a formatted string representation.
