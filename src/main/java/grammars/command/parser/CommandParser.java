@@ -51,6 +51,7 @@ public class CommandParser {
         AstNode.Imperative imperative = this.parseImperative();
         AstNode.ParameterList parameterList = this.parseParameterList();
         AstNode.OptionList optionList = this.parseOptionList();
+        this.eat(TokenType.TERMINAL);
         return new AstNode.Command(imperative, parameterList, optionList);
     }
 
@@ -82,7 +83,7 @@ public class CommandParser {
         // FOLLOW(option_list) = { TERMINAL }
         // FIRST(option) = { SLASH }
         while (!this.check(TokenType.TERMINAL) && this.check(TokenType.SLASH)) {
-            this.eat(TokenType.SLASH);
+            this.advance();
             AstNode.Option option = this.parseOption();
             options.add(option);
         }
@@ -103,7 +104,7 @@ public class CommandParser {
 
     private AstNode.OptionValue parseOptionValue() {
         if (this.check(TokenType.COLON)) {
-            this.eat(TokenType.COLON);
+            this.advance();
             AstNode.Text text = this.parseText();
             return new AstNode.OptionValue(text);
         } else {
