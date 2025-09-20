@@ -80,6 +80,11 @@ public abstract class AstNode {
     public static class ParameterList extends AstNode {
         private final ArrayList<Parameter> parameters;
 
+        /**
+         * Constructs a new ParameterList node.
+         *
+         * @param parameters ArrayList of Parameter, an ordered collection of parameters.
+         */
         public ParameterList(ArrayList<Parameter> parameters) {
             this.parameters = parameters;
         }
@@ -100,6 +105,11 @@ public abstract class AstNode {
     public static class Parameter extends AstNode {
         private final Word word;
 
+        /**
+         * Constructs a new Parameter node.
+         *
+         * @param word Word node.
+         */
         public Parameter(Word word) {
             this.word = word;
         }
@@ -120,6 +130,11 @@ public abstract class AstNode {
     public static class OptionList extends AstNode {
         private final ArrayList<Option> options;
 
+        /**
+         * Constructs a new OptionList node.
+         *
+         * @param options ArrayList of Option, an ordered collection of options.
+         */
         public OptionList(ArrayList<Option> options) {
             this.options = options;
         }
@@ -172,6 +187,11 @@ public abstract class AstNode {
     public static class OptionName extends AstNode {
         private final Word word;
 
+        /**
+         * Constructs a new OptionName node.
+         *
+         * @param word Word node.
+         */
         public OptionName(Word word) {
             this.word = word;
         }
@@ -192,6 +212,11 @@ public abstract class AstNode {
     public static class OptionValue extends AstNode {
         private final Text text;
 
+        /**
+         * Constructs a new OptionValue node.
+         *
+         * @param text Text node.
+         */
         public OptionValue(Text text) {
             this.text = text;
         }
@@ -212,6 +237,11 @@ public abstract class AstNode {
     public static class Text extends AstNode {
         private final String text;
 
+        /**
+         * Constructs a new Text node.
+         *
+         * @param text Text corresponding to this node.
+         */
         public Text(String text) {
             this.text = text;
         }
@@ -232,6 +262,11 @@ public abstract class AstNode {
     public static class Word extends AstNode {
         private final String word;
 
+        /**
+         * Constructs a new Word node.
+         *
+         * @param word Word corresponding to this node.
+         */
         public Word(String word) {
             this.word = word;
         }

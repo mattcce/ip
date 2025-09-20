@@ -9,6 +9,12 @@ public class TokenisedCommand {
     private final String ingest;
     private final ArrayList<Token> tokens;
 
+    /**
+     * Constructs a new TokenisedCommand.
+     *
+     * @param ingest Original string input.
+     * @param tokens Tokens lexed by the command lexer.
+     */
     TokenisedCommand(String ingest, ArrayList<Token> tokens) {
         this.ingest = ingest;
         this.tokens = tokens;

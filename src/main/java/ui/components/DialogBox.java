@@ -38,10 +38,24 @@ public class DialogBox extends HBox {
         displayPicture.setImage(img);
     }
 
+    /**
+     * Returns a dialog box corresponding to text input from the user.
+     *
+     * @param text Text input from the user.
+     * @param img  User profile picture.
+     * @return Dialog box for user input.
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Returns a dialog box corresponding to a response from Clanker.
+     *
+     * @param text Text response from Clanker.
+     * @param img  Clanker profile picture.
+     * @return Dialog box for Clanker response.
+     */
     public static DialogBox getClankerDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

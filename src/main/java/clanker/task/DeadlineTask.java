@@ -11,7 +11,7 @@ public class DeadlineTask extends Task {
     private final LocalDateTime deadline;
 
     /**
-     * Fully specifying constructor, meant to be used by the deserialiser only.
+     * Constructs a new DeadlineTask with all details specified, meant to be used by the deserialiser only.
      *
      * @param description Task description.
      * @param deadline    Task deadline in string representation (serialised).
@@ -25,7 +25,7 @@ public class DeadlineTask extends Task {
     }
 
     /**
-     * Basic constructor.
+     * Constructs a new DeadlineTask.
      *
      * @param description Task description.
      * @param deadline    Task deadline in string representation (serialised).

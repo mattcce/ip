@@ -10,6 +10,13 @@ public class Token {
     private final String literal;
     private final Location location;
 
+    /**
+     * Constructs a new lexeme token.
+     *
+     * @param type     Type of the identified lexeme.
+     * @param literal  String literal of the identified lexeme.
+     * @param location Location of the identified lexeme within the original ingest.
+     */
     Token(TokenType type, String literal, Location location) {
         this.type = type;
         this.literal = literal;

@@ -12,7 +12,7 @@ public class EventTask extends Task {
     private final LocalDateTime end;
 
     /**
-     * Fully specifying constructor, meant to be used by the deserialiser only.
+     * Constructs a new EventTask with all details specified, meant to be used by the deserialiser only.
      *
      * @param description Task description.
      * @param start       Task start datetime in string representation (serialised).
@@ -27,7 +27,7 @@ public class EventTask extends Task {
     }
 
     /**
-     * Basic constructor.
+     * Constructs a new EventTask.
      *
      * @param description Task description.
      * @param start       Task start datetime in string representation (serialised).

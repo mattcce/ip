@@ -15,6 +15,14 @@ class LexerError {
     private final String offendingLiteral;
     private final Location location;
 
+    /**
+     * Constructs a new LexerError, encapsulating details of an error occurring during lexing.
+     *
+     * @param lexerErrorType   Lexer error type.
+     * @param ingest           Original string input the lexer was lexing at the point of the error.
+     * @param offendingLiteral The offending literal the lexer was attempting to lex when the error occurred.
+     * @param location         Location of the offending literal in the original string input.
+     */
     LexerError(LexerErrorType lexerErrorType, String ingest, String offendingLiteral, Location location) {
         this.lexerErrorType = lexerErrorType;
         this.ingest = ingest;

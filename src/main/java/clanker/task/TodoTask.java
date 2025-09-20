@@ -5,7 +5,7 @@ package clanker.task;
  */
 public class TodoTask extends Task {
     /**
-     * Fully specifying constructor, meant to be used by the deserialiser only.
+     * Constructs a new TodoTask with all details specified, meant to be used by the deserialiser only.
      *
      * @param description Task description.
      * @param isDone      Flag for task completion.
@@ -18,7 +18,7 @@ public class TodoTask extends Task {
     }
 
     /**
-     * Basic constructor.
+     * Constructs a new TodoTask.
      *
      * @param description Task description.
      */
